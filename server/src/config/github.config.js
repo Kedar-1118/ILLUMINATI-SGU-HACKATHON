@@ -1,8 +1,9 @@
 import passport from "passport";
-import GitHubStrategy from "passport-github2";
+import {Strategy as GitHubStrategy} from "passport-github2";
 import { User } from "../models/user.model.js";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
+import { AsyncHandler } from "../utils/wrapAsync.js";
 import mongoose from "mongoose";
 
 passport.serializeUser((user, done) => done(null, user));
@@ -30,6 +31,7 @@ passport.use(
             provider: "github",
             githubId: profile.id,
           });
+          console.log("User created:", user);
           await user.save();
         }
 
