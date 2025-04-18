@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 import { AsyncHandler } from "../utils/wrapAsync.js";
+import { sendMail } from "../utils/sendMail.js";
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
@@ -16,26 +17,40 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL,
       scope: ["user:email"],
     },
-    AsyncHandler(async (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       let user = await User.findOne({ githubId: profile.id });
 
       if (!user) {
+        const email = profile.emails[0]?.value;
+        const githubId = profile.id;
+
+        const generatedPassword = `GH_${email.split("@")[0]}_${githubId}`;
+
         user = new User({
           login: profile.username,
-          email: profile.emails[0]?.value,
+          email,
           name: profile.displayName,
           avatar_url: profile.photos[0]?.value,
           bio: profile._json.bio,
           location: profile._json.location,
           provider: "github",
-          githubId: profile.id,
+          githubId,
+          password: generatedPassword, 
         });
+
         await user.save();
+
+        const subject = "Your GitHub Registration Details – [App Name]";
+        const message =
+          `Hey ${profile.displayName || profile.username},\n\n` +
+          `Thanks for signing up via GitHub! 🎉\n\nHere are your login details:\n\n` +
+          `Email: ${email}\nPassword: ${generatedPassword}\n\n` +
+          `🔐 We recommend you change this password immediately after logging in to ensure account security.\n\nCheers,\nTeam`;
+
+        await sendMail(email, subject, message);
       }
 
-      // TODO: also return accessToken
-
       return done(null, user);
-    })
+    }
   )
 );
