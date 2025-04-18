@@ -70,11 +70,15 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
       distinctLanguages
     );
 
-    return res.status(200).json({
+    const data = {
       userSkills: distinctSkills,
       userLanguages: distinctLanguages,
       matchedRepos,
-    });
+    };
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Repos matched successfully", data));
   } catch (error) {
     console.error("Error matching repos:", error.message);
     return res

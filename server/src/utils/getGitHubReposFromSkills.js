@@ -85,7 +85,7 @@ export const getGitHubReposFromSkills = async (
         url: repo.html_url,
         stars: repo.stargazers_count,
         language: repo.language,
-        topics: repo.topics,
+        // topics: repo.topics,
         matchPercentage,
       };
     });
