@@ -5,6 +5,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 import passport from "passport";
 
+import { ApiError } from "./utils/ApiError.js";
+import { ApiResponse } from "./utils/ApiResponse.js";
+
 const app = express();
 
 // Middlewares
@@ -42,8 +45,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Test route
+app.get("/test", (req, res) => {
+  return res.status(200).json(new ApiResponse(200, "Welcome to the API"));
+});
+
 // Import routes
+import authRoutes from "./routes/auth.route.js";
 
 // Declare routes
+app.use("/api/v1/auth", authRoutes);
 
 export { app };
