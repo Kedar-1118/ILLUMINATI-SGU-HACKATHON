@@ -49,7 +49,7 @@ async function getDefaultBranch(username, repoName) {
     });
     return res.data.default_branch;
   } catch (err) {
-    console.warn(`Failed to get default branch for ${repoName}`);
+    // console.warn(`Failed to get default branch for ${repoName}`);
     return null;
   }
 }
@@ -77,7 +77,7 @@ async function listPackageJsonFiles(username, repoName) {
 
     return packageJsonPaths;
   } catch (err) {
-    console.error(`Failed to list files in ${repoName}:`, err.message);
+    // console.error(`Failed to list files in ${repoName}:`, err.message);
     return [];
   }
 }
