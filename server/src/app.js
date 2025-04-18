@@ -54,8 +54,10 @@ app.get("/test", (req, res) => {
 
 // Import routes
 import authRoutes from "./routes/auth.route.js";
+import matchRoutes from "./routes/match.route.js";
 
 // Declare routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/match", matchRoutes);
 
 export { app };
