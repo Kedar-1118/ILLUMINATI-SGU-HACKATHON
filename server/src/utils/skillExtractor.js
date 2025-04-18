@@ -106,7 +106,7 @@ async function fetchDependencies(username, repoName, filePath) {
 
     return dependencies;
   } catch (err) {
-    console.warn(`Cannot fetch or parse ${filePath} in ${repoName}`);
+    // console.warn(`Cannot fetch or parse ${filePath} in ${repoName}`);
     return [];
   }
 }

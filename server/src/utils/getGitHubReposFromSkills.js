@@ -59,7 +59,6 @@ export const getGitHubReposFromSkills = async (
   try {
     const keywords = generateQueryFromSkills(skillsInput);
     const safeQuery = `${keywords.join(",")} in:readme stars:>100`;
-    console.log("🔍 GitHub query:", safeQuery);
 
     const response = await axios.get(GITHUB_API_URL, {
       params: {
@@ -94,7 +93,7 @@ export const getGitHubReposFromSkills = async (
     return repos.sort((a, b) => b.matchPercentage - a.matchPercentage); 
   } catch (error) {
     console.error(
-      "❌ GitHub Fetch Error:",
+      "GitHub Fetch Error:",
       error.response?.data || error.message
     );
     return [];

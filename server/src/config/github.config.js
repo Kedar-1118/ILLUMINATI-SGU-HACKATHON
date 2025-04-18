@@ -19,9 +19,6 @@ passport.use(
     AsyncHandler(async (accessToken, refreshToken, profile, done) => {
       let user = await User.findOne({ githubId: profile.id });
 
-      console.log("Access Token", accessToken);
-      console.log("Profile", profile);
-
       if (!user) {
         user = new User({
           login: profile.username,
@@ -35,6 +32,8 @@ passport.use(
         });
         await user.save();
       }
+
+      // TODO: also return accessToken
 
       return done(null, user);
     })

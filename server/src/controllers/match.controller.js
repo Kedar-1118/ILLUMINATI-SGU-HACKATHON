@@ -13,8 +13,6 @@ export const extractGithubSkills = AsyncHandler(async (req, res) => {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
-  console.log("Fetching GitHub repos for user:", username);
-
   try {
     const repos = await fetchGitHubRepos(username);
 
@@ -40,29 +38,23 @@ export const extractGithubSkills = AsyncHandler(async (req, res) => {
 });
 
 export const getMatchRepos = AsyncHandler(async (req, res) => {
-  const { username } = req.query;
+  const { username, count = 10 } = req.query;
 
   if (!username) {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
-  console.log("📥 Fetching GitHub repos for user:", username);
-
   try {
     const repos = await fetchGitHubRepos(username);
 
-    // Extract languages & skills from user’s GitHub profile data
     const languages = repos.flatMap((repo) => repo.languages || []);
     const skills = repos.flatMap((repo) => repo.skills || []);
 
-    // Remove duplicates
     const distinctLanguages = [...new Set(languages)];
     const distinctSkills = [...new Set(skills)];
 
-    // Merge into a skillsInput string for Groq
     const skillsInput = [...distinctLanguages, ...distinctSkills].join(", ");
 
-    // 🧠 Step 1: Use Groq to generate a smarter GitHub query string
     const generatedQuery = await getGitHubQueryFromSkills(skillsInput);
 
     if (!generatedQuery) {
@@ -71,10 +63,9 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
         .json(new ApiError(500, "Failed to generate query from Groq"));
     }
 
-    // 🧠 Step 2: Use our match logic on GitHub repos from that Groq-generated query
     const matchedRepos = await getGitHubReposFromSkills(
-      generatedQuery, // feed the Groq output directly
-      5,
+      generatedQuery,
+      count,
       distinctSkills,
       distinctLanguages
     );
@@ -85,7 +76,7 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
       matchedRepos,
     });
   } catch (error) {
-    console.error("❌ Error matching repos:", error.message);
+    console.error("Error matching repos:", error.message);
     return res
       .status(500)
       .json(new ApiError(500, "Error extracting or matching skills", error));

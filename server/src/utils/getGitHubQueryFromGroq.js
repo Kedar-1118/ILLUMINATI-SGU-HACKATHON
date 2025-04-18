@@ -27,7 +27,6 @@ export const getGitHubQueryFromSkills = async (skills) => {
     );
 
     const result = response.data.choices[0].message.content.trim();
-    console.log("Generated GitHub query:", result);
     return result;
   } catch (error) {
     console.error("Groq API error:", error.response?.data || error.message);
