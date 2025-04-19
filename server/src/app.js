@@ -52,17 +52,21 @@ app.use(passport.session());
 // Test route
 app.get("/test", (req, res) => {
   // return res.status(200).json(new ApiResponse(200, "Welcome to the API"));
-  res.send("<h1>Welcome to the API</h1><br><a href='/api/v1/auth/github'>Login with Github</a>");
+  res.send(
+    "<h1>Welcome to the API</h1><br><a href='/api/v1/auth/github'>Login with Github</a>"
+  );
 });
 
 // Import routes
 import authRoutes from "./routes/auth.route.js";
 import matchRoutes from "./routes/match.route.js";
 import userRoutes from "./routes/user.route.js";
+import analyticsRoutes from "./routes/analytics.route.js";
 
 // Declare routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/match", matchRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/analytics", analyticsRoutes);
 
 export { app };

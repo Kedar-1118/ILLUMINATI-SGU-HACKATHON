@@ -118,5 +118,6 @@ dist
 .pnp.*
 
 checkCloudinary.js
+/src/config/credentials.json
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
