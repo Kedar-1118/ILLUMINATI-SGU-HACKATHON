@@ -15,7 +15,7 @@ export default function LandingPage() {
             'service_iwcex8f',       // Replace with your EmailJS service ID
             'template_qkt8ldj',      // Replace with your EmailJS template ID
             form.current,
-            'Tf0tiIa2jbW73zyab'        // Replace with your EmailJS public key
+            'Tf0tiIa2jbW73zyab'      // Replace with your EmailJS public key
         ).then(
             (result) => {
                 console.log(result.text);
@@ -24,7 +24,12 @@ export default function LandingPage() {
             },
             (error) => {
                 console.log(error.text);
-                  return (
+                setIsSent(false);
+            }
+        );
+    };
+
+    return (
         <div className="min-h-screen bg-black text-white font-sans relative overflow-hidden">
             {/* Shiny animated background */}
             <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black animate-pulse z-0"></div>
@@ -87,11 +92,11 @@ export default function LandingPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center relative overflow-hidden"
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
                         >
                             <div className="text-3xl text-purple-400 mb-4"><FaRocket /></div>
                             <h4 className="text-xl font-semibold mb-2 text-purple-100">Smart Matching</h4>
-                            <p className="text-purple-300 mb-4">AI-powered recommendations.</p>
+                            <p className="text-purple-300">AI-powered recommendations.</p>
                         </motion.div>
 
                         {/* Card 3 */}
@@ -145,7 +150,10 @@ export default function LandingPage() {
                             required
                             className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-70 border border-purple-800 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-700"
                         ></textarea>
-                        <button type="submit" className="w-full py-3 bg-gradient-to-r from-purple-500 to-blue-900 text-white rounded-xl font-semibold hover:opacity-90 transition">
+                        <button
+                            type="submit"
+                            className="w-full py-3 bg-gradient-to-r from-purple-500 to-blue-900 text-white rounded-xl font-semibold hover:opacity-90 transition"
+                        >
                             Send
                         </button>
                         {isSent && (
@@ -153,15 +161,8 @@ export default function LandingPage() {
                         )}
                     </motion.form>
                 </section>
-
-
             </div>
         </div>
     );
 }
 
-            }
-        );
-    };
-
-  
