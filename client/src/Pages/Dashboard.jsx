@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import ProjectCard from '../components/ProjectCard';
+import ChatbotPopup from '../components/ChatbotPopup'; // Import the new chatbot component
 
 const Dashboard = () => {
   const [selectedTech, setSelectedTech] = useState([]);
@@ -132,7 +133,7 @@ const Dashboard = () => {
     }
   ];
 
-  // Filter logic remains the same
+  // Filter logic
   const toggleTech = (tech) => {
     setSelectedTech(prev =>
       prev.includes(tech) 
@@ -316,6 +317,9 @@ const Dashboard = () => {
           )}
         </div>
       </main>
+      
+      {/* Add the ChatbotPopup component here */}
+      <ChatbotPopup />
     </div>
   );
 };
