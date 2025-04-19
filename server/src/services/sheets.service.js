@@ -1,11 +1,16 @@
 import { google } from "googleapis";
-import credentials from "../config/credentials.json" assert { type: "json" };
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 const spreadsheetId = process.env.SHEET_ID;
+
+// Extract credentials from environment variables
+const credentials = {
+  client_email: process.env.CLIENT_EMAIL,
+  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'), // Ensure newlines are handled correctly
+};
 
 // 🔐 Create an authenticated client using service account credentials
 const authClient = new google.auth.JWT({
