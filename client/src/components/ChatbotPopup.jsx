@@ -32,8 +32,8 @@ const ChatbotPopup = () => {
     setInputValue(e.target.value);
   };
   
-  // Handle form submission
-  const handleSubmit = async (e) => {
+ // Handle form submission
+const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
     
@@ -44,17 +44,30 @@ const ChatbotPopup = () => {
     setIsLoading(true);
     
     try {
-      // Call the API endpoint that connects to Groq
-      const response = await axios.post('/api/chat', { query: userMessage });
+      // Direct API call to Groq
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          messages: [{ role: 'user', content: userMessage },
+            { role: "system", content: "You are an Open Source Helper: you will only answer queries about code, open‑source contributions, libraries, tools, and governance. If asked anything outside that domain, reply “Please stick to coding and contributions, sir.” Keep every answer as short as possible: 2–3 sentences for minor questions, up to 6–7 sentences for more complex topics." }
+          ],
+          model: "llama-3.3-70b-versatile",
+        },
+        {
+          headers: {
+            'Authorization': 'Bearer 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', // Replace with your actual API key
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       
       // Add AI response to chat
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: response.data.message 
+        content: response.data.choices[0].message.content 
       }]);
     } catch (error) {
       console.error('Error sending message:', error);
-      // Add error message
       setMessages(prev => [...prev, { 
         role: 'assistant', 
         content: 'Sorry, I encountered an error processing your request. Please try again.' 
@@ -98,8 +111,8 @@ const ChatbotPopup = () => {
               </svg>
             </div>
             <div>
-              <h3 className="font-medium text-gray-200">Project Assistant</h3>
-              <p className="text-xs text-gray-400">Powered by Groq</p>
+              <h3 className="font-medium text-gray-200">GitGenie</h3>
+              <p className="text-xs text-gray-400">Powered by Ollama</p>
             </div>
           </div>
           <button 
