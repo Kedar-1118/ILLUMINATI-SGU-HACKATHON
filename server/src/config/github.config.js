@@ -40,7 +40,7 @@ passport.use(
 
         await user.save();
 
-        const subject = "Your GitHub Registration Details – [App Name]";
+        const subject = "Your GitHub Registration Details - [App Name]";
         const message =
           `Hey ${profile.displayName || profile.username},\n\n` +
           `Thanks for signing up via GitHub! 🎉\n\nHere are your login details:\n\n` +
