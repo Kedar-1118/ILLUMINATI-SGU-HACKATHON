@@ -1,34 +1,42 @@
 import { google } from "googleapis";
 import credentials from "../config/credentials.json" assert { type: "json" };
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+const spreadsheetId = process.env.SHEET_ID;
+
+// 🔐 Create an authenticated client using service account credentials
+const authClient = new google.auth.JWT({
+  email: credentials.client_email,
+  key: credentials.private_key,
+  scopes: SCOPES,
+});
+
+const sheets = google.sheets({ version: "v4", auth: authClient });
 
 /**
  * Get data from the specified range in the Google Sheet.
- * @param {string} range The range in the sheet to fetch data from.
- * @returns {Promise} The data from the sheet.
  */
 const getDataFromSheet = async (range) => {
-  const sheets = google.sheets({ version: "v4", auth: credentials });
   const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: "YOUR_SHEET_ID", // Replace with your Sheet ID
-    range: range,
+    spreadsheetId,
+    range,
   });
   return response.data.values;
 };
 
 /**
  * Write data to the specified range in the Google Sheet.
- * @param {string} range The range in the sheet to write data to.
- * @param {Array} values The data to write.
- * @returns {Promise} The response from the Google Sheets API.
  */
 const writeDataToSheet = async (range, values) => {
-  const sheets = google.sheets({ version: "v4", auth: credentials });
   const response = await sheets.spreadsheets.values.update({
-    spreadsheetId: "YOUR_SHEET_ID", // Replace with your Sheet ID
-    range: range,
+    spreadsheetId,
+    range,
     valueInputOption: "RAW",
     requestBody: {
-      values: values,
+      values,
     },
   });
   return response.data;
@@ -36,18 +44,14 @@ const writeDataToSheet = async (range, values) => {
 
 /**
  * Append data to the specified range in the Google Sheet.
- * @param {string} range The range in the sheet to append data to.
- * @param {Array} values The data to append.
- * @returns {Promise} The response from the Google Sheets API.
  */
 const appendDataToSheet = async (range, values) => {
-  const sheets = google.sheets({ version: "v4", auth: credentials });
   const response = await sheets.spreadsheets.values.append({
-    spreadsheetId: "YOUR_SHEET_ID", // Replace with your Sheet ID
-    range: range,
+    spreadsheetId,
+    range,
     valueInputOption: "RAW",
     requestBody: {
-      values: values,
+      values,
     },
   });
   return response.data;

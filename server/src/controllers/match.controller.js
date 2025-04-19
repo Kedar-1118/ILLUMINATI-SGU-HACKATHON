@@ -6,6 +6,7 @@ import { fetchGitHubRepos } from "../utils/skillExtractor.js";
 import { getGitHubQueryFromSkills } from "../utils/getGitHubQueryFromGroq.js";
 import { getGitHubReposFromSkills } from "../utils/getGitHubReposFromSkills.js";
 import { KNOWN_SKILLS } from "../utils/knownSkills.js";
+import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 // Controller to get user skills
 export const getUserSkills = AsyncHandler(async (req, res) => {
@@ -28,6 +29,12 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
 
   const matchedSkills = unique.filter((skill) =>
     KNOWN_SKILLS.map((s) => s.toLowerCase()).includes(skill)
+  );
+
+  await logToAnalytics(
+    "User skills fetched successfully",
+    "Skills fetched",
+    userId
   );
 
   return res.status(200).json(
@@ -71,7 +78,7 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
       skillsInput = userSkills; // Use provided skills if available
     }
 
-    console.log("Extracted skills:", skillsInput); // Log the extracted skills
+    // console.log("Extracted skills:", skillsInput); // Log the extracted skills
 
     // Generate the GitHub query based on skills
     const generatedQuery = getGitHubQueryFromSkills(skillsInput);
@@ -82,6 +89,13 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
       count,
       distinctSkills,
       distinctLanguages
+    );
+
+    await logToAnalytics(
+      "RepoMatch",
+      "Matched Repos for User",
+      user.login,
+      matchedRepos.map((repo) => `${repo.full_name} - ${repo.html_url}`)
     );
 
     // Respond with the matched repositories
