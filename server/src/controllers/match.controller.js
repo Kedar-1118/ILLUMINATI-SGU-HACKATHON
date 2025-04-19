@@ -49,18 +49,13 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
 // Controller to get matched GitHub repositories based on user's skills
 export const getMatchRepos = AsyncHandler(async (req, res) => {
   const { count = 15 } = req.query; // Default count is 10
-  console.log("hello");
   const userId = req.user._id; // Get the user ID from the request
-  console.log(userId);
   const user = await User.findById(userId).select("login").lean(); // Fetch user by ID
-  console.log(user);
   if (!user) {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
   const userSkills = req.body.skills;
-
-  // console.log("User skills:", userSkills);
 
   try {
     let skillsInput = [];
@@ -80,8 +75,6 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
     } else {
       skillsInput = userSkills; // Use provided skills if available
     }
-
-    // console.log("Extracted skills:", skillsInput); // Log the extracted skills
 
     // Generate the GitHub query based on skills
     const generatedQuery = getGitHubQueryFromSkills(skillsInput);

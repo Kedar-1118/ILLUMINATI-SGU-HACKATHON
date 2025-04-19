@@ -15,7 +15,6 @@ const axiosInstance = axios.create({
 
 export default async function getRepoInfo(req, res) {
     const { repo } = req.body; // format: owner/repo
-    console.log('Repo requested:', repo);
 
     try {
         const [owner, name] = repo.split('/');

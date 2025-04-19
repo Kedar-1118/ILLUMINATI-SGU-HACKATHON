@@ -33,9 +33,6 @@ export const getGitHubQueryFromSkills = async (skills) => {
     // Remove backticks or any non-query text
     query = query.replace(/`/g, "").split("\n")[0].trim();
 
-    // Log the generated query to debug
-    console.log("Generated GitHub Query:", query);
-
     // Cut to 256 characters max (GitHub's q param limit)
     if (query.length > 256) {
       query = query.slice(0, 256);

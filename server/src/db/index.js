@@ -10,7 +10,7 @@ export const connectDB = async () => {
     );
     
     console.log(
-      `MongoDB connected!! DB Host: ${connectionInstance.connection.host}`
+      `MongoDB connected!! DB Host: It's a secret!`,
     );
   } catch (err) {
     console.error("Error: ", err);

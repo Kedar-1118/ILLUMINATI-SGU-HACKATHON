@@ -10,7 +10,7 @@ import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 export const sendOTP = AsyncHandler(async (req, res) => {
   const { email, login } = req.body;
-  console.log(email, login);
+
   if (!(email || login)) {
     throw new ApiError(400, "Email or username is required");
   }
@@ -18,7 +18,7 @@ export const sendOTP = AsyncHandler(async (req, res) => {
   const user = await User.findOne({
     $or: [{ email }, { login }],
   });
-  console.log(user);
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }

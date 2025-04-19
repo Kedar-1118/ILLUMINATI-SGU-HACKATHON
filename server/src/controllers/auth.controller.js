@@ -7,7 +7,6 @@ import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 export const login = AsyncHandler(async (req, res) => {
   const { email, login, password } = req.body;
-  console.log(email, login, password);
 
   if (!password || (!email && !login)) {
     throw new ApiError(400, "Email and password are required");
