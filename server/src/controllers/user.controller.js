@@ -32,18 +32,9 @@ export const sendOTP = AsyncHandler(async (req, res) => {
     expiresAt,
   });
 
-<<<<<<< HEAD
-
-
-
-  // const subject = "Your OTP Code";
-  // const message = `Your OTP code is ${otp}. It is valid for 5 minutes.`;
 
   const subject = "🔐 Your One-Time Password (OTP) - Action Required";
 
-=======
-  const subject = "🔐 Your One-Time Password (OTP) - Action Required";
->>>>>>> 1fe8cc3a3df0bff7d86283e158101afdd2486bb4
 
   const messageText = `Hello ${user.name || user.login},
 
