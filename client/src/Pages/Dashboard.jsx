@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import ProjectCard from '../components/ProjectCard';
 import ChatbotPopup from '../components/ChatbotPopup';
 
+
 const Dashboard = () => {
   const [selectedTech, setSelectedTech] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
