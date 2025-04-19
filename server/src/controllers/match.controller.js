@@ -32,9 +32,10 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
   );
 
   await logToAnalytics(
-    "User skills fetched successfully",
-    "Skills fetched",
-    userId
+    "SkillExtraction",
+    "Extracted skills from GitHub repos",
+    user.login,
+    matchedSkills
   );
 
   return res.status(200).json(
@@ -110,6 +111,14 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
     );
   } catch (error) {
     console.error("Error matching repos:", error);
+
+    await logToAnalytics(
+      "Error matching repos",
+      "Error occurred while matching repos",
+      user.login,
+      error.message
+    );
+
     return res
       .status(500)
       .json(new ApiError(500, "Error extracting or matching skills", error));

@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/wrapAsync.js";
 import { sendMail } from "../utils/sendMail.js";
 import { generateOTP } from "../utils/generateOTP.js";
+import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 export const sendOTP = AsyncHandler(async (req, res) => {
   const { email, login } = req.body;
@@ -31,6 +32,7 @@ export const sendOTP = AsyncHandler(async (req, res) => {
     expiresAt,
   });
 
+<<<<<<< HEAD
 
 
 
@@ -39,6 +41,9 @@ export const sendOTP = AsyncHandler(async (req, res) => {
 
   const subject = "🔐 Your One-Time Password (OTP) - Action Required";
 
+=======
+  const subject = "🔐 Your One-Time Password (OTP) - Action Required";
+>>>>>>> 1fe8cc3a3df0bff7d86283e158101afdd2486bb4
 
   const messageText = `Hello ${user.name || user.login},
 
@@ -66,6 +71,13 @@ Team`;
 `;
 
   await sendMail(email, subject, messageText, messageHTML);
+
+  await logToAnalytics(
+    "OTPRequest",
+    "OTP sent successfully",
+    user.login,
+    `OTP sent to ${email || login}`
+  );
 
   res.status(200).json(
     new ApiResponse(200, "OTP sent successfully", {
@@ -115,6 +127,14 @@ export const verifyOTP = AsyncHandler(async (req, res) => {
   }
 
   const accessToken = user.generateAccessToken();
+
+  await logToAnalytics(
+    "OTPVerify",
+    "OTP verified successfully",
+    user.login,
+    `Password reset for ${user.login}`
+  );
+
   res.status(200).json(
     new ApiResponse(200, "OTP verified successfully", {
       accessToken,
