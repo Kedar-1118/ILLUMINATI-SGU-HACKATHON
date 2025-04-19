@@ -48,17 +48,30 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
+  const userSkills = req.body.skills;
+
+  console.log("User skills:", userSkills);
+
   try {
-    const repos = await fetchGitHubRepos(user.login); // Fetch GitHub repositories for the user
-    const languages = repos.flatMap((repo) => repo.languages || []); // Extract languages from repos
-    const skills = repos.flatMap((repo) => repo.skills || []); // Extract skills from repos
+    let skillsInput = [];
+    let distinctLanguages = [];
+    let distinctSkills = [];
+    if (!userSkills || userSkills.length === 0) {
+      const repos = await fetchGitHubRepos(user.login); // Fetch GitHub repositories for the user
+      const languages = repos.flatMap((repo) => repo.languages || []); // Extract languages from repos
+      const skills = repos.flatMap((repo) => repo.skills || []); // Extract skills from repos
 
-    const distinctLanguages = [...new Set(languages)]; // Remove duplicates
-    const distinctSkills = [...new Set(skills)]; // Remove duplicates
+      distinctLanguages = [...new Set(languages)]; // Remove duplicates
+      distinctSkills = [...new Set(skills)]; // Remove duplicates
 
-    const skillsInput = [...distinctLanguages, ...distinctSkills]
-      .filter(Boolean) // Filter out any falsy values
-      .slice(0, 10); // Limit the number of skills
+      skillsInput = [...distinctLanguages, ...distinctSkills]
+        .filter(Boolean) // Filter out any falsy values
+        .slice(0, 10); // Limit the number of skills
+    } else {
+      skillsInput = userSkills; // Use provided skills if available
+    }
+
+    console.log("Extracted skills:", skillsInput); // Log the extracted skills
 
     // Generate the GitHub query based on skills
     const generatedQuery = getGitHubQueryFromSkills(skillsInput);
