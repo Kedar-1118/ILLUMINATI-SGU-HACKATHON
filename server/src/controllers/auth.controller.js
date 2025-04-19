@@ -6,6 +6,7 @@ import { AsyncHandler } from "../utils/wrapAsync.js";
 
 export const login = AsyncHandler(async (req, res) => {
   const { email, login, password } = req.body;
+  console.log(email, login, password);
 
   if (!password || (!email && !login)) {
     throw new ApiError(400, "Email and password are required");
@@ -15,6 +16,7 @@ export const login = AsyncHandler(async (req, res) => {
     $or: [{ email }, { login }],
   });
 
+
   if (!user) {
     throw new ApiError(401, "Invalid email or password");
   }
@@ -22,7 +24,7 @@ export const login = AsyncHandler(async (req, res) => {
   const isMatch = await user.verifyPassword(password);
 
   if (!isMatch) {
-    throw new ApiError(401, "Invalid email or password");
+    throw new ApiError(401, "Invalid password");
   }
 
   const accessToken = user.generateAccessToken();

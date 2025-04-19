@@ -50,7 +50,7 @@ const ContributionChart = ({ username }) => {
     return (
         <div className="bg-gray-800 text-white rounded-2xl shadow-lg p-6 space-y-10">
             <h2 className="text-2xl font-semibold text-center">
-                📊 GitHub {period === 'month' ? 'Monthly' : 'Weekly'} Contributions - <span className="text-blue-400">{username}</span>
+                GitHub {period === 'month' ? 'Monthly' : 'Weekly'}   <span className="text-blue-400">Contributions</span>
             </h2>
 
             {/* Bar Chart */}

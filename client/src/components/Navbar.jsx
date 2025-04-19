@@ -1,93 +1,85 @@
-// src/components/Sidebar.jsx
+// src/components/Navbar.jsx
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaHome, FaUser,FaTachometerAlt, FaSignOutAlt, FaTimes, FaBars } from 'react-icons/fa';
+import { FaHome, FaUser, FaTachometerAlt, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const navLinks = [
+    { to: '/', icon: <FaHome />, text: 'Home' },
+    { to: '/profile', icon: <FaUser />, text: 'Profile' },
+    { to: '/dashboard', icon: <FaTachometerAlt />, text: 'Dashboard' },
+    { to: '/logout', icon: <FaSignOutAlt />, text: 'Logout' },
+  ];
 
   return (
-    <>
-      {/* Mobile Toggle Button */}
-      <button 
-        onClick={toggleSidebar}
-        className="fixed z-60 bottom-4 left-4 md:hidden bg-gray-800 p-3 rounded-full shadow-lg"
-      >
-        {isCollapsed ? <FaBars className="text-white" /> : <FaTimes className="text-white" />}
-      </button>
+    <header className="bg-gray-900 text-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
 
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 flex transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'}`}>
-        {/* Hover Sidebar */}
-        <div className="group relative h-full">
-          <div className={`bg-gray-900 h-full transition-all duration-300 ease-in-out ${isCollapsed ? 'w-0' : 'w-12 group-hover:w-48'} overflow-hidden`}>
-            {/* Logo */}
-            <div className="flex items-center justify-center h-16">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 6V18M8 10L12 6L16 10M8 14L12 18L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </div>
+          {/* Logo / Site Name */}
+          <div className="flex-shrink-0 text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            OSMatch
+          </div>
 
-            {/* Nav Items */}
-            <nav className="mt-4 flex flex-col gap-2 text-sm">
-      <SidebarLink 
-        to="/" 
-        icon={<FaHome />} 
-        text="Home" 
-        isActive={location.pathname === '/'}
-      />
-      <SidebarLink 
-        to="/profile" 
-        icon={<FaUser />} 
-        text="Profile" 
-        isActive={location.pathname === '/profile'}
-      />
-      <SidebarLink 
-        to="/dashboard" 
-        icon={<FaTachometerAlt />} 
-        text="Dashboard" 
-        isActive={location.pathname === '/dashboard'}
-      />
-      <SidebarLink 
-        to="/logout" 
-        icon={<FaSignOutAlt />} 
-        text="Logout" 
-        isActive={location.pathname === '/logout'}
-              />
-            </nav>
+          {/* Desktop Menu */}
+          <nav className="hidden md:flex gap-6 items-center">
+            {navLinks.map(({ to, icon, text }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
+                    ? 'bg-gray-800 text-white'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                  }`
+                }
+              >
+                {icon}
+                {text}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Mobile Toggle Button */}
+          <div className="md:hidden">
+            <button
+              onClick={toggleMenu}
+              className="p-2 rounded-md bg-gray-800 hover:bg-gray-700 focus:outline-none"
+            >
+              {isOpen ? <FaTimes className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
+            </button>
           </div>
         </div>
-
-        {/* Site name top-right */}
-        <div className="fixed top-4 right-8 text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-          OSMatch
-        </div>
       </div>
-    </>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <nav className="md:hidden px-4 pb-4 space-y-2">
+          {navLinks.map(({ to, icon, text }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
+                  ? 'bg-gray-800 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                }`
+              }
+            >
+              {icon}
+              {text}
+            </NavLink>
+          ))}
+        </nav>
+      )}
+    </header>
   );
 };
 
-const SidebarLink = ({ to, icon, text, isActive }) => (
-  <NavLink
-    to={to}
-    className={`flex items-center px-4 py-3 transition-colors ${
-      isActive 
-        ? 'bg-gray-800 text-white border-l-4 border-purple-500' 
-        : 'text-gray-400 hover:bg-gray-700 hover:text-white'
-    }`}
-  >
-    <span className="text-lg">{icon}</span>
-    <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      {text}
-    </span>
-  </NavLink>
-);
-
-export default Sidebar;
+export default Navbar;

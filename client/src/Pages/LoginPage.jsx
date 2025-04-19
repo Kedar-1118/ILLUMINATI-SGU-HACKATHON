@@ -5,7 +5,7 @@ import {
     ArrowPathIcon,
     CheckCircleIcon,
 } from '@heroicons/react/24/outline';
-import { Navigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ const LoginPage = () => {
             : { login: email, password };
 
         try {
-            const response = await fetch('http://localhost:5000/api/v1/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(loginPayload),
@@ -37,11 +37,22 @@ const LoginPage = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful:', data);
-                Navigate('/');
+                // Cookies.set('userId', data.message.user._id, { expires: 7 });
+                // Cookies.set('accessToken', data.message.accessToken, { expires: 7 });
+                // Cookies.set('usename', data.message.user.login, { expires: 7 });
+
+                localStorage.setItem('userId', data.message.user._id);
+                localStorage.setItem('accessToken', data.message.accessToken);
+                localStorage.setItem('username', data.message.user.login);
+
+                window.location.href = '/dashboard';
+            } else {
+                const errData = await response.json();
+                alert(errData.message || 'Login failed');
             }
         } catch (err) {
             console.error('Login error:', err);
+            alert('Something went wrong');
         }
 
         setIsLoading(false);
@@ -49,10 +60,10 @@ const LoginPage = () => {
 
     const handleForgotPassword = () => {
         if (!email) {
-            alert('Please enter your email first');
+            alert('Please enter your email or username first');
             return;
         }
-        setShowOTPModal(true); // Just show modal, don’t send OTP yet
+        setShowOTPModal(true);
     };
 
     const handleSendOTP = async () => {
@@ -68,17 +79,54 @@ const LoginPage = () => {
                 body: JSON.stringify(loginPayload),
             });
 
+            const data = await response.json();
             if (response.ok) {
                 setOtpSent(true);
-                setOtpMessage('OTP sent successfully to your email.');
+                const expiresAt = new Date(data.message.expiresAt).toLocaleTimeString();
+                setOtpMessage(`OTP sent successfully. Valid till ${expiresAt}`);
                 startResendTimer();
-                setTimeout(() => setOtpMessage(''), 4000);
+                setTimeout(() => setOtpMessage(''), 5000);
             } else {
-                setOtpMessage('Failed to send OTP. Please try again.');
+                setOtpMessage(data.message || 'Failed to send OTP. Please try again.');
                 setTimeout(() => setOtpMessage(''), 4000);
             }
         } catch (err) {
-            console.error('Error sending OTP:', err);
+            console.log('Error sending OTP:', err);
+            setOtpMessage('Something went wrong while sending OTP.');
+            setTimeout(() => setOtpMessage(''), 4000);
+        }
+
+        setIsLoading(false);
+    };
+
+    const handleOTPVerification = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const payload = {
+                email: email.includes('@') ? email : undefined,
+                login: !email.includes('@') ? email : undefined,
+                otp,
+                password: newPassword,
+            };
+
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/verify-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('OTP Verified! Password changed successfully.');
+                setShowOTPModal(false);
+            } else {
+                alert(data.message || 'OTP verification failed.');
+            }
+        } catch (err) {
+            console.error('OTP verification error:', err);
+            alert('Failed to verify OTP.');
         }
 
         setIsLoading(false);
@@ -87,7 +135,6 @@ const LoginPage = () => {
     const startResendTimer = () => {
         setCanResend(false);
         setResendTimer(60);
-
         const interval = setInterval(() => {
             setResendTimer(prev => {
                 if (prev <= 1) {
@@ -100,48 +147,18 @@ const LoginPage = () => {
         }, 1000);
     };
 
-
-    const handleOTPVerification = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/verify-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp, password: newPassword }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                // console.log('OTP verified:', data);
-
-                alert('OTP Verified ,Password changed successfully!');
-                setShowOTPModal(false);
-            } else {
-                alert(data.message || 'OTP verification failed');
-            }
-        } catch (err) {
-            console.error('OTP verification error:', err);
-            alert('Failed to verify OTP.');
-        }
-
-        setIsLoading(false);
-    };
-
     return (
-        <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center py-12 px-6 lg:px-8 ">
+        <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center py-12 px-6 lg:px-8">
             {otpMessage && (
                 <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 
-                ${otpMessage === 'OTP sent successfully to your email.' ? 'bg-green-600' : 'bg-red-600'} 
-                text-white py-2 px-4 rounded-md shadow-lg w-fit flex items-center justify-center gap-2`}>
-                    {otpMessage === 'OTP sent successfully to your email.'
-                        ? <CheckCircleIcon className="h-5 w-5 text-white" />
-                        : <ArrowPathIcon className="h-5 w-5 text-white" />}
-                    <span className="text-sm font-medium">{otpMessage}</span>
+                    ${otpMessage.includes('successfully') ? 'bg-green-600' : 'bg-red-600'} 
+                    text-white py-2 px-4 rounded-md shadow-lg flex items-center gap-2`}>
+                    {otpMessage.includes('successfully')
+                        ? <CheckCircleIcon className="h-5 w-5" />
+                        : <ArrowPathIcon className="h-5 w-5" />}
+                    <span className="text-sm">{otpMessage}</span>
                 </div>
             )}
-
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-purple-400">
@@ -156,7 +173,7 @@ const LoginPage = () => {
                 <div className="bg-gray-800 py-8 px-6 shadow rounded-lg">
                     <form onSubmit={handleLogin} className="space-y-6">
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Email or GitHub Username
                             </label>
                             <div className="mt-1 relative">
@@ -165,18 +182,17 @@ const LoginPage = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    name="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     className="w-full pl-10 pr-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                    placeholder="you@example.com"
+                                    placeholder="you@example.com or username"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Password
                             </label>
                             <div className="mt-1 relative">
@@ -185,7 +201,6 @@ const LoginPage = () => {
                                 </div>
                                 <input
                                     type="password"
-                                    name="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -228,13 +243,7 @@ const LoginPage = () => {
             {showOTPModal && (
                 <div className="fixed z-10 inset-0 flex items-center justify-center bg-black bg-opacity-60">
                     <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm text-center">
-                        <div className="mb-4 text-purple-400 font-bold text-lg">
-                            OTP Verification
-                        </div>
-
-                        <p className="text-sm text-gray-300 mb-2">
-                            { }
-                        </p>
+                        <div className="mb-4 text-purple-400 font-bold text-lg">OTP Verification</div>
 
                         <button
                             onClick={handleSendOTP}
@@ -246,12 +255,11 @@ const LoginPage = () => {
 
                         {otpSent && (
                             <>
-                                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-300 text-left mb-1">
+                                <label className="block text-sm font-medium text-gray-300 text-left mb-1">
                                     New Password
                                 </label>
                                 <input
                                     type="password"
-                                    name="newPassword"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     required
@@ -275,6 +283,7 @@ const LoginPage = () => {
                                         Verify OTP
                                     </button>
                                 </form>
+
                                 <div className="text-center mt-2 mb-4">
                                     {canResend ? (
                                         <button
@@ -289,13 +298,11 @@ const LoginPage = () => {
                                         </p>
                                     )}
                                 </div>
-
                             </>
                         )}
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

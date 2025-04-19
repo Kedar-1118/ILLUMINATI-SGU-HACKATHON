@@ -8,7 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const RepoAnalyzer = () => {
     const { owner, repo } = useParams();
-    const githubUrl = `https://github.com/${owner}/${repo}`;
+    // const githubUrl = `https://github.com/${owner}/${repo}`;s
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);

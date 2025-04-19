@@ -35,13 +35,13 @@ export default function LandingPage() {
             <div className="absolute top-1/4 left-1/4 w-full h-full bg-gradient-radial from-purple-900 to-transparent opacity-10 rounded-full blur-3xl z-0"></div>
 
             <div className="relative z-20">
-                <Navbar />
+
 
                 {/* Hero Section */}
                 <main className="text-center px-6 py-20">
-                    <motion.h2 
-                        initial={{ opacity: 0, y: -50 }} 
-                        animate={{ opacity: 1, y: 0 }} 
+                    <motion.h2
+                        initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                         className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent"
                     >
@@ -71,8 +71,8 @@ export default function LandingPage() {
                     </h3>
                     <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         {/* Card 1 */}
-                        <motion.div 
-                            whileHover={{ scale: 1.05 }} 
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -85,8 +85,8 @@ export default function LandingPage() {
                         </motion.div>
 
                         {/* Card 2 */}
-                        <motion.div 
-                            whileHover={{ scale: 1.05 }} 
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -99,8 +99,8 @@ export default function LandingPage() {
                         </motion.div>
 
                         {/* Card 3 */}
-                        <motion.div 
-                            whileHover={{ scale: 1.05 }} 
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -119,11 +119,11 @@ export default function LandingPage() {
                     <h3 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">
                         Connect With Us
                     </h3>
-                    <motion.form 
+                    <motion.form
                         ref={form}
                         onSubmit={sendEmail}
-                        initial={{ opacity: 0, y: 20 }} 
-                        whileInView={{ opacity: 1, y: 0 }} 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1 }}
                         className="max-w-xl mx-auto space-y-4"
@@ -158,7 +158,7 @@ export default function LandingPage() {
                     </motion.form>
                 </section>
 
-               
+
             </div>
         </div>
     );

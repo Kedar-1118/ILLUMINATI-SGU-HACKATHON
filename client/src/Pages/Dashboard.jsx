@@ -4,12 +4,12 @@ import ProjectCard from '../components/ProjectCard';
 import ChatbotPopup from '../components/ChatbotPopup';
 import ContributionChart from '../components/ContributionCharts';
 
-
 const Dashboard = () => {
   const [selectedTech, setSelectedTech] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
+  const [projects, setProjects] = useState([]);
   const username = 'jogruber';
 
   const technologies = [
@@ -17,125 +17,20 @@ const Dashboard = () => {
     'AI/ML', 'Rust', 'Go', 'GraphQL', 'Django', 'Vue'
   ];
 
-  const projects = [
-    {
-      id: 1,
-      title: "AI Documentation Assistant",
-      problemStatement: "Automated documentation generation for better OSS maintainability",
-      description: "GPT-4 powered documentation generator for open source projects",
-      tech: ['AI/ML', 'Python', 'TypeScript'],
-      stars: 1428,
-      difficulty: 'Intermediate',
-      lastUpdated: '2 days ago',
-      repoUrl: "#",
-      issues: 12,
-      contributors: 28
-    },
-    {
-      id: 2,
-      title: "React Component Library",
-      problemStatement: "Standardizing UI components across open source projects",
-      description: "Accessible UI components with TypeScript support",
-      tech: ['React', 'TypeScript'],
-      stars: 892,
-      difficulty: 'Beginner',
-      lastUpdated: '1 week ago',
-      repoUrl: "#",
-      issues: 5,
-      contributors: 15
-    },
-    {
-      id: 3,
-      title: "Database Optimization Tool",
-      problemStatement: "Improving performance of legacy database systems",
-      description: "Performance analyzer for PostgreSQL databases",
-      tech: ['Python', 'Go', 'Rust'],
-      stars: 567,
-      difficulty: 'Advanced',
-      lastUpdated: '3 days ago',
-      repoUrl: "#",
-      issues: 8,
-      contributors: 12
-    },
-    {
-      id: 4,
-      title: "Real-Time Chat Application",
-      problemStatement: "Secure communication for developer communities",
-      description: "WebSocket-based chat with E2E encryption",
-      tech: ['Node.js', 'React', 'TypeScript'],
-      stars: 329,
-      difficulty: 'Intermediate',
-      lastUpdated: '5 days ago',
-      repoUrl: "#",
-      issues: 3,
-      contributors: 9
-    },
-    {
-      id: 5,
-      title: "E-commerce Platform",
-      problemStatement: "Open source alternative to proprietary commerce solutions",
-      description: "Headless commerce solution with Django backend",
-      tech: ['Django', 'Python', 'GraphQL'],
-      stars: 784,
-      difficulty: 'Advanced',
-      lastUpdated: '1 day ago',
-      repoUrl: "#",
-      issues: 15,
-      contributors: 23
-    },
-    {
-      id: 6,
-      title: "Data Visualization Toolkit",
-      problemStatement: "Making complex data accessible through visualization",
-      description: "Interactive charts and dashboards builder",
-      tech: ['React', 'TypeScript', 'D3.js'],
-      stars: 1203,
-      difficulty: 'Intermediate',
-      lastUpdated: '4 hours ago',
-      repoUrl: "#",
-      issues: 7,
-      contributors: 18
-    },
-    {
-      id: 7,
-      title: "ML Model Deployment",
-      problemStatement: "Simplifying production deployment of machine learning models",
-      description: "Kubernetes-based deployment pipeline for ML models",
-      tech: ['Python', 'AI/ML', 'Go'],
-      stars: 458,
-      difficulty: 'Advanced',
-      lastUpdated: '6 days ago',
-      repoUrl: "#",
-      issues: 11,
-      contributors: 14
-    },
-    {
-      id: 8,
-      title: "GraphQL API Boilerplate",
-      problemStatement: "Accelerating GraphQL API development",
-      description: "Production-ready GraphQL server template",
-      tech: ['Node.js', 'GraphQL', 'TypeScript'],
-      stars: 932,
-      difficulty: 'Intermediate',
-      lastUpdated: '2 weeks ago',
-      repoUrl: "#",
-      issues: 2,
-      contributors: 7
-    },
-    {
-      id: 9,
-      title: "UI Testing Framework",
-      problemStatement: "Ensuring visual consistency across UI updates",
-      description: "Visual regression testing for component libraries",
-      tech: ['Vue', 'TypeScript', 'Node.js'],
-      stars: 672,
-      difficulty: 'Intermediate',
-      lastUpdated: '3 days ago',
-      repoUrl: "#",
-      issues: 6,
-      contributors: 11
-    }
-  ];
+  useEffect(() => {
+    fetch('http://localhost:5000/api/v1/match/match-repos', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.message.matchedRepos);
+        setProjects(data.message.matchedRepos);
+      })
+      .catch(err => console.error('Failed to fetch matched repos:', err));
+  }, []);
 
   const toggleTech = (tech) => {
     setSelectedTech(prev =>
@@ -145,13 +40,13 @@ const Dashboard = () => {
     );
   };
 
-  const filteredProjects = projects.filter(project => {
-    const matchesTech = selectedTech.length === 0 ||
-      project.tech.some(tech => selectedTech.includes(tech));
-    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTech && matchesSearch;
-  });
+  // const filteredProjects = projects.filter(project => {
+  //   const matchesTech = selectedTech.length === 0 ||
+  //     project.tech.some(tech => selectedTech.includes(tech));
+  //   const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     project.description?.toLowerCase().includes(searchQuery.toLowerCase());
+  //   return matchesTech && matchesSearch;
+  // });
 
   useEffect(() => {
     const handleClickOutside = () => setIsDropdownOpen(false);
@@ -164,23 +59,21 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-900 text-gray-100">
       {/* Navbar */}
-      <Navbar onHoverChange={setIsNavbarExpanded} />
+      {/* <Navbar onHoverChange={setIsNavbarExpanded} /> */}
 
       {/* Main Content */}
       <div
-        className={`flex-1 transition-all duration-300 ease-in-out ${isNavbarExpanded ? 'ml-48' : 'ml-12'
-          }`}
+        className={`flex-1 transition-all duration-300 ease-in-out `}
       >
-        <Navbar />
+        {/* <Navbar /> */}
 
         <main className="max-w-7xl mx-auto px-6 py-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Open Source Dashboard</h1>
             <p className="text-gray-400 mt-2">Discover projects matching your skills</p>
           </div>
-          <div className="mb-8">
-            <ContributionChart username={username} />
-          </div>
+
+
           {/* Search and Filters */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="relative">
@@ -270,8 +163,8 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.length > 0 ? (
-              filteredProjects.map((project) => (
+            {projects.length > 0 ? (
+              projects.map((project) => (
                 <ProjectCard key={project.id} project={project} selectedTech={selectedTech} />
               ))
             ) : (
