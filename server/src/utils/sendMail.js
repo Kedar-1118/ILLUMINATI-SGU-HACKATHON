@@ -12,12 +12,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (to, subject, text) => {
+/**
+ * Sends an email using the configured transporter
+ * @param {string} to - Recipient email address
+ * @param {string} subject - Email subject line
+ * @param {string} text - Plain text fallback content
+ * @param {string} html - Optional HTML formatted content
+ */
+export const sendMail = async (to, subject, text, html = "") => {
   const mailOptions = {
-    from: `App Support: ${process.env.EMAIL_USER}`,
+    from: `"App Support" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     text,
+    ...(html && { html }), // only include html if provided
   };
 
   try {

@@ -35,21 +35,60 @@ passport.use(
           location: profile._json.location,
           provider: "github",
           githubId: profile.id,
-          password: generatedPassword, 
+          password: generatedPassword,
         });
 
         await user.save();
 
         user.accessToken = accessToken;
 
-        const subject = "Your GitHub Registration Details - [App Name]";
-        const message =
-          `Hey ${profile.displayName || profile.username},\n\n` +
-          `Thanks for signing up via GitHub! 🎉\n\nHere are your login details:\n\n` +
-          `Email: ${email}\nPassword: ${generatedPassword}\n\n` +
-          `🔐 We recommend you change this password immediately after logging in to ensure account security.\n\nCheers,\nTeam`;
+        const subject =
+          "Welcome to Open-Nest - Your GitHub Registration Details";
 
-        await sendMail(email, subject, message);
+        const messageText = `Hey ${profile.displayName || profile.username},
+
+Thanks for signing up via GitHub! 🎉
+
+Here are your login details:
+
+Email: ${email}
+Password: ${generatedPassword}
+
+We recommend you change this password immediately after logging in to ensure your account's security.
+
+Login here: ${process.env.CLIENT_URL}/login
+
+Cheers,
+The [App Name] Team`;
+
+        const messageHTML = `
+  <div style="font-family: Arial, sans-serif; color: #333;">
+    <h2>Welcome to <span style="color:#4F46E5;">[App Name]</span> 🎉</h2>
+    <p>Hey <strong>${profile.displayName || profile.username}</strong>,</p>
+    <p>Thanks for signing up via GitHub! We're excited to have you on board.</p>
+    <p><strong>Your login details:</strong></p>
+    <ul>
+      <li><strong>Email:</strong> ${email}</li>
+      <li><strong>Password:</strong> ${generatedPassword}</li>
+    </ul>
+    <p style="color: #DC2626;"><strong>Important:</strong> Please change your password after logging in to keep your account secure.</p>
+    <p>
+      <a href="${process.env.CLIENT_URL}/login" style="
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4F46E5;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      ">Login Now</a>
+    </p>
+    <p>If you didn't expect this email, you can safely ignore it.</p>
+    <p>Cheers,<br/>The Open-Nest Team</p>
+  </div>
+`;
+
+        await sendMail(email, subject, messageText, messageHTML);
       }
 
       return done(null, user);
