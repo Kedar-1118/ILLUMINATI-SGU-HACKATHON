@@ -1,146 +1,164 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Navbar from "../components/Navbar";
+import { FaGithub, FaRocket, FaUsers } from "react-icons/fa";
+import { motion } from "framer-motion";
+import emailjs from '@emailjs/browser';
 
 export default function LandingPage() {
+    const form = useRef();
+    const [isSent, setIsSent] = useState(false);
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+
+        emailjs.sendForm(
+            'service_iwcex8f',       // Replace with your EmailJS service ID
+            'template_qkt8ldj',      // Replace with your EmailJS template ID
+            form.current,
+            'Tf0tiIa2jbW73zyab'        // Replace with your EmailJS public key
+        ).then(
+            (result) => {
+                console.log(result.text);
+                setIsSent(true);
+                form.current.reset();
+            },
+            (error) => {
+                console.log(error.text);
+            }
+        );
+    };
+
     return (
-        <div className="min-h-screen bg-black text-white font-sans pl-12 relative overflow-hidden">
-            {/* Creating a shiny black gradient background effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black z-0"></div>
-            <div className="absolute inset-0 bg-black opacity-70 z-0"></div>
-            
-            {/* Subtle radial gradient for shine effect */}
-            <div className="absolute top-1/4 left-1/4 w-full h-full bg-gradient-to-br from-gray-800 to-transparent opacity-5 rounded-full blur-3xl z-0"></div>
-            
-            {/* Content container with relative positioning to appear above the gradient overlay */}
-            <div className="relative z-10">
-                {/* Keeping navbar unchanged as requested */}
+        <div className="min-h-screen bg-black text-white font-sans relative overflow-hidden">
+            {/* Shiny animated background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black animate-pulse z-0"></div>
+            <div className="absolute top-1/4 left-1/4 w-full h-full bg-gradient-radial from-purple-900 to-transparent opacity-10 rounded-full blur-3xl z-0"></div>
+
+            <div className="relative z-20">
                 <Navbar />
 
-                {/* Hero section with logo/brand element */}
-                <div className="flex items-center justify-center pt-8 pb-2 ml-4">
-                    {/* <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mr-2"></div> */}
-                    {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">RepoMatch</h1> */}
-                </div>
-
-                <main className="text-center px-6 py-20 ml-4">
-                    <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">Connecting Developers to Open Source Opportunities</h2>
-                    <p className="text-lg md:text-xl text-purple-200 mb-8 max-w-2xl mx-auto">
-                        RepoMatch is an open-source platform that helps contributors discover and get matched with GitHub repositories based on skills, interests, and contribution history.
-                    </p>
-                    <button className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition hover:opacity-90">Explore Matches</button>
+                {/* Hero Section */}
+                <main className="text-center px-6 py-20">
+                    <motion.h2 
+                        initial={{ opacity: 0, y: -50 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ duration: 1 }}
+                        className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent"
+                    >
+                        Discover. Match. Contribute.
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-lg md:text-xl text-purple-200 mb-8 max-w-2xl mx-auto"
+                    >
+                        Join the open-source revolution and get matched with projects that suit your skills.
+                    </motion.p>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
+                    >
+                        Start Exploring
+                    </motion.button>
                 </main>
 
-                <section id="features" className="px-6 py-20 ml-4 relative">
-                    {/* Subtle shine effect for this section */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-80 z-0"></div>
-                    
-                    <div className="relative z-10">
-                        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">Features</h3>
-                        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                            <div className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-xl shadow-lg border border-transparent bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-padding">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mb-4"></div>
-                                <h4 className="text-xl font-semibold mb-2">Smart Repo Matching</h4>
-                                <p className="text-purple-200">Match developers with GitHub repositories using tags, topics, and commit patterns.</p>
-                            </div>
-                            <div className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-xl shadow-lg border border-transparent bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-padding">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mb-4"></div>
-                                <h4 className="text-xl font-semibold mb-2">Contributor Profiles</h4>
-                                <p className="text-purple-200">Build a profile with skills, tech stack, and preferred contribution areas.</p>
-                            </div>
-                            <div className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-xl shadow-lg border border-transparent bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-padding">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mb-4"></div>
-                                <h4 className="text-xl font-semibold mb-2">Project Insights</h4>
-                                <p className="text-purple-200">Get details like activity level, open issues, labels, and onboarding difficulty.</p>
-                            </div>
-                        </div>
+                {/* Cards Section */}
+                <section className="py-20 px-6">
+                    <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">
+                        Platform Highlights
+                    </h3>
+                    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        {/* Card 1 */}
+                        <motion.div 
+                            whileHover={{ scale: 1.05 }} 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
+                        >
+                            <div className="text-3xl text-purple-400 mb-4"><FaGithub /></div>
+                            <h4 className="text-xl font-semibold mb-2 text-purple-100">GitHub Sync</h4>
+                            <p className="text-purple-300">Seamlessly sync your contributions.</p>
+                        </motion.div>
+
+                        {/* Card 2 */}
+                        <motion.div 
+                            whileHover={{ scale: 1.05 }} 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center relative overflow-hidden"
+                        >
+                            <div className="text-3xl text-purple-400 mb-4"><FaRocket /></div>
+                            <h4 className="text-xl font-semibold mb-2 text-purple-100">Smart Matching</h4>
+                            <p className="text-purple-300 mb-4">AI-powered recommendations.</p>
+                        </motion.div>
+
+                        {/* Card 3 */}
+                        <motion.div 
+                            whileHover={{ scale: 1.05 }} 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
+                        >
+                            <div className="text-3xl text-purple-400 mb-4"><FaUsers /></div>
+                            <h4 className="text-xl font-semibold mb-2 text-purple-100">Community Focus</h4>
+                            <p className="text-purple-300">Connect with maintainers.</p>
+                        </motion.div>
                     </div>
                 </section>
 
-                <section id="how-it-works" className="px-6 py-20 bg-gradient-to-b from-black to-gray-950 ml-4 relative">
-                    <div className="absolute inset-0 bg-black opacity-70 z-0"></div>
-                    
-                    <div className="relative z-10">
-                        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">How It Works</h3>
-                        <div className="max-w-4xl mx-auto space-y-6 text-purple-200">
-                            <div className="flex items-center">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mr-4 flex items-center justify-center font-bold">1</div>
-                                <p>Sign in with GitHub and import your public contributions.</p>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mr-4 flex items-center justify-center font-bold">2</div>
-                                <p>Customize your interests, tech stack, and preferred project types.</p>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mr-4 flex items-center justify-center font-bold">3</div>
-                                <p>Get matched with repositories aligned with your profile.</p>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md mr-4 flex items-center justify-center font-bold">4</div>
-                                <p>Explore projects, filter by onboarding ease, and start contributing.</p>
-                            </div>
-                        </div>
-                    </div>
+                {/* Contact Section */}
+                <section className="py-20 px-6 bg-gradient-to-b from-gray-950 to-black relative">
+                    <h3 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">
+                        Connect With Us
+                    </h3>
+                    <motion.form 
+                        ref={form}
+                        onSubmit={sendEmail}
+                        initial={{ opacity: 0, y: 20 }} 
+                        whileInView={{ opacity: 1, y: 0 }} 
+                        viewport={{ once: true }}
+                        transition={{ duration: 1 }}
+                        className="max-w-xl mx-auto space-y-4"
+                    >
+                        <input
+                            type="text"
+                            name="user_name"
+                            placeholder="Name"
+                            required
+                            className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-70 border border-purple-800 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-700"
+                        />
+                        <input
+                            type="email"
+                            name="user_email"
+                            placeholder="Email"
+                            required
+                            className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-70 border border-purple-800 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-700"
+                        />
+                        <textarea
+                            name="message"
+                            rows="5"
+                            placeholder="Message"
+                            required
+                            className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-70 border border-purple-800 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-700"
+                        ></textarea>
+                        <button type="submit" className="w-full py-3 bg-gradient-to-r from-purple-500 to-blue-900 text-white rounded-xl font-semibold hover:opacity-90 transition">
+                            Send
+                        </button>
+                        {isSent && (
+                            <p className="text-green-400 text-center mt-4">Your message has been sent!</p>
+                        )}
+                    </motion.form>
                 </section>
 
-                <section id="team" className="px-6 py-20 bg-gradient-to-b from-gray-950 to-black ml-4 relative">
-                    {/* Light beam effect */}
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-64 h-32 bg-purple-900 opacity-10 blur-3xl rounded-full z-0"></div>
-                    
-                    <div className="relative z-10">
-                        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">Meet the Team</h3>
-                        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
-                            <div>
-                                <div className="w-24 h-24 mx-auto bg-gradient-to-r from-purple-500 to-blue-900 rounded-full mb-4 p-1">
-                                    <div className="w-full h-full bg-black rounded-full"></div>
-                                </div>
-                                <h4 className="font-semibold text-purple-100">Alex - Dev Lead</h4>
-                                <p className="text-purple-300">Designs the matching algorithm and GitHub API integration.</p>
-                            </div>
-                            <div>
-                                <div className="w-24 h-24 mx-auto bg-gradient-to-r from-purple-500 to-blue-900 rounded-full mb-4 p-1">
-                                    <div className="w-full h-full bg-black rounded-full"></div>
-                                </div>
-                                <h4 className="font-semibold text-purple-100">Sam - UX Designer</h4>
-                                <p className="text-purple-300">Crafts accessible, contributor-friendly experiences.</p>
-                            </div>
-                            <div>
-                                <div className="w-24 h-24 mx-auto bg-gradient-to-r from-purple-500 to-blue-900 rounded-full mb-4 p-1">
-                                    <div className="w-full h-full bg-black rounded-full"></div>
-                                </div>
-                                <h4 className="font-semibold text-purple-100">Jordan - Community Manager</h4>
-                                <p className="text-purple-300">Connects developers and maintainers, grows the open-source ecosystem.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="contact" className="px-6 py-20 bg-black ml-4 relative">
-                    {/* Subtle shine effect */}
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-gray-900 to-transparent opacity-10 rounded-full blur-3xl z-0"></div>
-                    
-                    <div className="relative z-10">
-                        <h3 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">Get In Touch</h3>
-                        <form className="max-w-xl mx-auto space-y-4">
-                            <div className="bg-gradient-to-r from-purple-500 to-blue-900 p-0.5 rounded">
-                                <input className="w-full px-4 py-2 rounded bg-gradient-to-b from-black to-gray-950 text-white" type="text" placeholder="Your Name" />
-                            </div>
-                            <div className="bg-gradient-to-r from-purple-500 to-blue-900 p-0.5 rounded">
-                                <input className="w-full px-4 py-2 rounded bg-gradient-to-b from-black to-gray-950 text-white" type="email" placeholder="Your Email" />
-                            </div>
-                            <div className="bg-gradient-to-r from-purple-500 to-blue-900 p-0.5 rounded">
-                                <textarea className="w-full px-4 py-2 rounded bg-gradient-to-b from-black to-gray-950 text-white" rows="5" placeholder="Your Message"></textarea>
-                            </div>
-                            <button className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition hover:opacity-90 w-full">Send Message</button>
-                        </form>
-                    </div>
-                </section>
-
-                <footer className="text-center p-6 border-t border-transparent bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-padding text-purple-100 bg-black ml-4">
-                    <div className="flex justify-center items-center space-x-2">
-                        <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-900 rounded-md"></div>
-                        <p>&copy; {new Date().getFullYear()} RepoMatch. Built with ❤ by open-source contributors.</p>
-                    </div>
-                </footer>
+               
             </div>
         </div>
     );
