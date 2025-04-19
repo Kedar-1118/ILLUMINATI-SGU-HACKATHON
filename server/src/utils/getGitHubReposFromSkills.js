@@ -2,11 +2,11 @@ import axios from "axios";
 
 const GITHUB_API_URL = "https://api.github.com/search/repositories";
 
-
+// Generate cleaned keyword list from input string
 const generateQueryFromSkills = (skills) => {
   const keywords = skills
     .toLowerCase()
-    .replace(/[^\w\s]/gi, "") 
+    .replace(/[^\w\s]/gi, "") // remove special characters
     .split(/\s+/)
     .filter(
       (word) =>
@@ -24,10 +24,10 @@ const generateQueryFromSkills = (skills) => {
         ].includes(word)
     );
 
-  return [...new Set(keywords)].slice(0, 5); 
+  return [...new Set(keywords)].slice(0, 20); // initially allow more to trim later
 };
 
-
+// Calculate how well a repo matches user skills
 const calculateMatchPercentage = (repo, userSkills, userLanguages) => {
   const keywords = new Set(
     [
@@ -46,10 +46,10 @@ const calculateMatchPercentage = (repo, userSkills, userLanguages) => {
     }
   });
 
-  return Math.round((matchCount / total) * 100); 
+  return Math.round((matchCount / total) * 100);
 };
 
-
+// Fetch repos from GitHub based on skill keywords
 export const getGitHubReposFromSkills = async (
   skillsInput,
   count = 5,
@@ -58,11 +58,24 @@ export const getGitHubReposFromSkills = async (
 ) => {
   try {
     const keywords = generateQueryFromSkills(skillsInput);
-    const safeQuery = `${keywords.join(",")} in:readme stars:>100`;
+    let baseQuery = "in:readme stars:>100";
+    let safeKeywords = [];
+    let currentQuery = baseQuery;
+
+    // Add keywords one by one while staying under 250 characters
+    for (const keyword of keywords) {
+      const testQuery = `${[...safeKeywords, keyword].join(",")},${baseQuery}`;
+      if (testQuery.length <= 250) {
+        safeKeywords.push(keyword);
+        currentQuery = testQuery;
+      } else {
+        break;
+      }
+    }
 
     const response = await axios.get(GITHUB_API_URL, {
       params: {
-        q: safeQuery,
+        q: currentQuery,
         sort: "stars",
         order: "desc",
         per_page: count,
@@ -85,12 +98,11 @@ export const getGitHubReposFromSkills = async (
         url: repo.html_url,
         stars: repo.stargazers_count,
         language: repo.language,
-        // topics: repo.topics,
         matchPercentage,
       };
     });
 
-    return repos.sort((a, b) => b.matchPercentage - a.matchPercentage); 
+    return repos.sort((a, b) => b.matchPercentage - a.matchPercentage);
   } catch (error) {
     console.error(
       "GitHub Fetch Error:",

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
+import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/wrapAsync.js";
 import { fetchGitHubRepos } from "../utils/skillExtractor.js";
@@ -7,7 +8,9 @@ import { getGitHubQueryFromSkills } from "../utils/getGitHubQueryFromGroq.js";
 import { getGitHubReposFromSkills } from "../utils/getGitHubReposFromSkills.js";
 
 export const extractGithubSkills = AsyncHandler(async (req, res) => {
-  const { username } = req.query;
+  const userId = req.user._id;
+
+  const username = await User.findById(userId).select("login").lean();
 
   if (!username) {
     return res.status(400).json(new ApiError(400, "Username is required"));
@@ -38,7 +41,10 @@ export const extractGithubSkills = AsyncHandler(async (req, res) => {
 });
 
 export const getMatchRepos = AsyncHandler(async (req, res) => {
-  const { username, count = 10 } = req.query;
+  const { count = 10 } = req.query;
+
+  const userId = req.user._id;
+  const username = await User.findById(userId).select("login").lean();
 
   if (!username) {
     return res.status(400).json(new ApiError(400, "Username is required"));
