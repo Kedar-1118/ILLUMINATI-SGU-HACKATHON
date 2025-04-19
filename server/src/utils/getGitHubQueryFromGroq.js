@@ -12,10 +12,10 @@ export const getGitHubQueryFromSkills = async (skills) => {
         messages: [
           {
             role: "user",
-            content: `Generate a GitHub search query for a developer skilled in ${skills}. Only return the search query string.`,
+            content: `Only return a GitHub repository search query (no explanation, no formatting) for a developer skilled in ${skills}. The query should be short and valid for GitHub's API.`,
           },
         ],
-        temperature: 0.5,
+        temperature: 0.3,
         max_tokens: 100,
       },
       {
@@ -26,8 +26,17 @@ export const getGitHubQueryFromSkills = async (skills) => {
       }
     );
 
-    const result = response.data.choices[0].message.content.trim();
-    return result;
+    let query = response.data.choices[0].message.content.trim();
+
+    // Remove backticks or any non-query text
+    query = query.replace(/`/g, "").split("\n")[0].trim();
+
+    // Cut to 256 characters max (GitHub's q param limit)
+    if (query.length > 256) {
+      query = query.slice(0, 256);
+    }
+
+    return query;
   } catch (error) {
     console.error("Groq API error:", error.response?.data || error.message);
     return null;

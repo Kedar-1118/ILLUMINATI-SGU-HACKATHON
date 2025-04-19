@@ -1,113 +1,35 @@
 import axios from "axios";
 
-const GITHUB_API_URL = "https://api.github.com/search/repositories";
-
-// Generate cleaned keyword list from input string
-const generateQueryFromSkills = (skills) => {
-  const keywords = skills
-    .toLowerCase()
-    .replace(/[^\w\s]/gi, "") // remove special characters
-    .split(/\s+/)
-    .filter(
-      (word) =>
-        word.length > 2 &&
-        ![
-          "and",
-          "or",
-          "not",
-          "with",
-          "for",
-          "the",
-          "a",
-          "an",
-          "using",
-        ].includes(word)
-    );
-
-  return [...new Set(keywords)].slice(0, 20); // initially allow more to trim later
-};
-
-// Calculate how well a repo matches user skills
-const calculateMatchPercentage = (repo, userSkills, userLanguages) => {
-  const keywords = new Set(
-    [
-      ...(repo.topics || []),
-      repo.language || "",
-      ...(repo.description?.split(/\W+/) || []),
-    ].map((word) => word.toLowerCase())
-  );
-
-  let matchCount = 0;
-  let total = userSkills.length + userLanguages.length;
-
-  [...userSkills, ...userLanguages].forEach((skill) => {
-    if (keywords.has(skill.toLowerCase())) {
-      matchCount++;
-    }
-  });
-
-  return Math.round((matchCount / total) * 100);
-};
-
-// Fetch repos from GitHub based on skill keywords
-export const getGitHubReposFromSkills = async (
-  skillsInput,
-  count = 5,
-  userSkills = [],
-  userLanguages = []
-) => {
+export const getGitHubReposFromSkills = async (query, count, skills, languages) => {
   try {
-    const keywords = generateQueryFromSkills(skillsInput);
-    let baseQuery = "in:readme stars:>100";
-    let safeKeywords = [];
-    let currentQuery = baseQuery;
+    const searchURL = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=${count}`;
 
-    // Add keywords one by one while staying under 250 characters
-    for (const keyword of keywords) {
-      const testQuery = `${[...safeKeywords, keyword].join(",")},${baseQuery}`;
-      if (testQuery.length <= 250) {
-        safeKeywords.push(keyword);
-        currentQuery = testQuery;
-      } else {
-        break;
-      }
-    }
+    // console.log("🌐 GitHub API Search URL:", searchURL);
 
-    const response = await axios.get(GITHUB_API_URL, {
-      params: {
-        q: currentQuery,
-        sort: "stars",
-        order: "desc",
-        per_page: count,
-      },
+    const response = await axios.get(searchURL, {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "skill-match-app",
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, // Optional: If using auth
       },
     });
 
-    const repos = response.data.items.map((repo) => {
-      const matchPercentage = calculateMatchPercentage(
-        repo,
-        userSkills,
-        userLanguages
-      );
-      return {
-        name: repo.full_name,
-        description: repo.description,
-        url: repo.html_url,
-        stars: repo.stargazers_count,
-        language: repo.language,
-        matchPercentage,
-      };
-    });
+    const repos = response.data.items || [];
 
-    return repos.sort((a, b) => b.matchPercentage - a.matchPercentage);
+    return repos.map((repo) => ({
+      name: repo.name,
+      full_name: repo.full_name,
+      html_url: repo.html_url,
+      description: repo.description,
+      stars: repo.stargazers_count,
+      language: repo.language,
+      owner: {
+        login: repo.owner.login,
+        avatar_url: repo.owner.avatar_url,
+        html_url: repo.owner.html_url,
+      },
+    }));
   } catch (error) {
-    console.error(
-      "GitHub Fetch Error:",
-      error.response?.data || error.message
-    );
+    console.error("💥 GitHub Repo Fetch Error:", error.response?.data || error.message);
     return [];
   }
 };
