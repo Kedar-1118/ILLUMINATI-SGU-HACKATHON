@@ -4,6 +4,7 @@ import session from "express-session";
 import helmet from "helmet";
 import morgan from "morgan";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 import { ApiError } from "./utils/ApiError.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
@@ -29,6 +30,8 @@ app.use(
 
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
+
+app.use(cookieParser());
 
 app.use(
   session({
