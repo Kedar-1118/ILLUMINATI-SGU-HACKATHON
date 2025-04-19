@@ -24,11 +24,7 @@ export default function LandingPage() {
             },
             (error) => {
                 console.log(error.text);
-            }
-        );
-    };
-
-    return (
+                  return (
         <div className="min-h-screen bg-black text-white font-sans relative overflow-hidden">
             {/* Shiny animated background */}
             <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black animate-pulse z-0"></div>
@@ -163,3 +159,9 @@ export default function LandingPage() {
         </div>
     );
 }
+
+            }
+        );
+    };
+
+  

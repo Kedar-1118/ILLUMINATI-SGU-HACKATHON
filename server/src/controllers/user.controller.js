@@ -31,12 +31,41 @@ export const sendOTP = AsyncHandler(async (req, res) => {
     expiresAt,
   });
 
+<<<<<<< HEAD
 
 
   const subject = "Your OTP Code";
   const message = `Your OTP code is ${otp}. It is valid for 5 minutes.`;
+=======
+  const subject = "🔐 Your One-Time Password (OTP) - Action Required";
+>>>>>>> 06d6522cd6a773436b6926e9251e025d328173a7
 
-  await sendMail(email, subject, message);
+  const messageText = `Hello ${user.name || user.login},
+
+You requested a one-time password (OTP) to proceed with your account.
+
+✅ OTP: ${otp}
+⏳ Valid for: 5 minutes
+
+If you did not request this, please ignore this email or contact support.
+
+Stay secure,
+Team`;
+
+  const messageHTML = `
+  <div style="font-family: Arial, sans-serif; color: #333;">
+    <h2>🔐 Your OTP Code</h2>
+    <p>Hello <strong>${user.name || user.login}</strong>,</p>
+    <p>You requested a one-time password (OTP) to proceed with your account.</p>
+    <p><strong style="font-size: 18px;">OTP: ${otp}</strong></p>
+    <p><em>⏳ This code is valid for 5 minutes only.</em></p>
+    <br />
+    <p>If you did not request this, please ignore this email or reach out to our support team.</p>
+    <p>Stay secure,<br/>Team</p>
+  </div>
+`;
+
+  await sendMail(email, subject, messageText, messageHTML);
 
   res.status(200).json(
     new ApiResponse(200, "OTP sent successfully", {
