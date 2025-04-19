@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_API_URL = process.env.GROQ_API_URL || "https://api.groq.com/v1/chat/completions";
+const GROQ_API_URL =
+  process.env.GROQ_API_URL || "https://api.groq.com/v1/chat/completions";
 
+// Function to generate GitHub query from skills
 export const getGitHubQueryFromSkills = async (skills) => {
   try {
     const response = await axios.post(
@@ -30,6 +32,9 @@ export const getGitHubQueryFromSkills = async (skills) => {
 
     // Remove backticks or any non-query text
     query = query.replace(/`/g, "").split("\n")[0].trim();
+
+    // Log the generated query to debug
+    console.log("Generated GitHub Query:", query);
 
     // Cut to 256 characters max (GitHub's q param limit)
     if (query.length > 256) {

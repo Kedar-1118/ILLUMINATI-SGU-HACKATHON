@@ -1,10 +1,12 @@
+// utils/getGitHubReposFromSkills.js
+
 import axios from "axios";
 
 export const getGitHubReposFromSkills = async (query, count, skills, languages) => {
   try {
     const searchURL = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=${count}`;
 
-    // console.log("🌐 GitHub API Search URL:", searchURL);
+    console.log("🌐 GitHub API Search URL:", searchURL); // Log the search URL for debugging
 
     const response = await axios.get(searchURL, {
       headers: {

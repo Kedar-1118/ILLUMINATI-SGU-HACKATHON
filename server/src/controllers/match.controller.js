@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/wrapAsync.js";
 import { fetchGitHubRepos } from "../utils/skillExtractor.js";
@@ -8,6 +7,7 @@ import { getGitHubQueryFromSkills } from "../utils/getGitHubQueryFromGroq.js";
 import { getGitHubReposFromSkills } from "../utils/getGitHubReposFromSkills.js";
 import { KNOWN_SKILLS } from "../utils/knownSkills.js";
 
+// Controller to get user skills
 export const getUserSkills = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId).select("login").lean();
@@ -38,39 +38,32 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
   );
 });
 
+// Controller to get matched GitHub repositories based on user's skills
 export const getMatchRepos = AsyncHandler(async (req, res) => {
-  const { count = 10 } = req.query;
-  const userId = req.user._id;
+  const { count = 10 } = req.query; // Default count is 10
+  const userId = req.user._id; // Get the user ID from the request
 
-  const user = await User.findById(userId).select("login").lean();
+  const user = await User.findById(userId).select("login").lean(); // Fetch user by ID
   if (!user) {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
   try {
-    const repos = await fetchGitHubRepos(user.login);
+    const repos = await fetchGitHubRepos(user.login); // Fetch GitHub repositories for the user
+    const languages = repos.flatMap((repo) => repo.languages || []); // Extract languages from repos
+    const skills = repos.flatMap((repo) => repo.skills || []); // Extract skills from repos
 
-    const languages = repos.flatMap((repo) => repo.languages || []);
-    const skills = repos.flatMap((repo) => repo.skills || []);
-
-    const distinctLanguages = [...new Set(languages)];
-    const distinctSkills = [...new Set(skills)];
+    const distinctLanguages = [...new Set(languages)]; // Remove duplicates
+    const distinctSkills = [...new Set(skills)]; // Remove duplicates
 
     const skillsInput = [...distinctLanguages, ...distinctSkills]
-      .filter(Boolean)
-      .slice(0, 10)
-      .join(", ");
+      .filter(Boolean) // Filter out any falsy values
+      .slice(0, 10); // Limit the number of skills
 
-    // console.log("Skills Input:", skillsInput);
+    // Generate the GitHub query based on skills
+    const generatedQuery = getGitHubQueryFromSkills(skillsInput);
 
-    let generatedQuery = await getGitHubQueryFromSkills(skillsInput);
-    // console.log("Generated GitHub Query:", generatedQuery);
-
-    if (!generatedQuery) {
-      console.warn("Using fallback query.");
-      generatedQuery = "stars:>100 pushed:>2023-01-01";
-    }
-
+    // Fetch matched repositories using the generated query
     const matchedRepos = await getGitHubReposFromSkills(
       generatedQuery,
       count,
@@ -78,6 +71,7 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
       distinctLanguages
     );
 
+    // Respond with the matched repositories
     return res.status(200).json(
       new ApiResponse(200, "Repos matched successfully", {
         userSkills: distinctSkills,
