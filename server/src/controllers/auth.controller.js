@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/wrapAsync.js";
+import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 export const login = AsyncHandler(async (req, res) => {
   const { email, login, password } = req.body;
@@ -29,6 +30,12 @@ export const login = AsyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select(
     "-password -__v -createdAt -updatedAt"
+  );
+
+  await logToAnalytics(
+    "LoginSuccess",
+    "User logged in successfully",
+    user.email || user.login
   );
 
   const options = {
@@ -64,6 +71,9 @@ export const logout = AsyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
+
+  await logToAnalytics("Logout", "User logged out", user.email || user.login);
+
   res
     .status(200)
     .clearCookie("accessToken", options)

@@ -3,6 +3,7 @@ import passport from "passport";
 import { login, logout } from "../controllers/auth.controller.js";
 import { verifyJWT } from "../middlewares/authMiddleware.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 const router = express.Router();
 
@@ -14,7 +15,12 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "/" }),
-  (req, res) => {
+  async (req, res) => {
+    await logToAnalytics(
+      "LoginSuccess",
+      "GitHub login successful",
+      req.user.email || req.user.login
+    );
     res.status(200).json(new ApiResponse(200, "Login successful", req.user));
   }
 );
