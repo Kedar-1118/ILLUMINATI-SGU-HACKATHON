@@ -4,11 +4,10 @@ import BadgesGrid from '../components/BadgesGrid';
 
 // Badge images configuration
 const BADGES = {
-  'Golden Contributor': '/public/streaks/30th_Contributrion.svg',
-  'Bug Hunter': '/badges/bug-hunter.png',
-  'Documentation Hero': '/badges/documentation-hero.png',
-  'Community Leader': '/badges/community-leader.png',
-  'First PR': '/badges/first-pr.png'
+  '30th Contribution': '/streaks/30th_Contributrion.svg',
+  '15th Contribution': '/streaks/15th Contributrion.svg',
+  '5th Contribution': '/streaks/5th Contributrion.svg',
+  '1st Contribution': '/streaks/1st Contribution.svg'
 };
 
 const Profile = () => {
@@ -26,11 +25,11 @@ const Profile = () => {
       following: 562
     },
     achievements: [
-      { name: 'Golden Contributor', earned: true, earnedDate: '2024-03-15' },
-      { name: 'Bug Hunter', earned: true, earnedDate: '2024-02-28' },
-      { name: 'Documentation Hero', earned: false },
-      { name: 'Community Leader', earned: true, earnedDate: '2024-04-01' },
-      { name: 'First PR', earned: true, earnedDate: '2024-01-10' }
+      { name: '1st Contribution', earned: true, earnedDate: '2024-01-10' },
+      { name: '5th Contribution', earned: true, earnedDate: '2024-04-01' },
+      { name: '15th Contribution', earned: false},
+      { name: '30th Contribution', earned: false }
+      
     ],
     projects: [
       {
