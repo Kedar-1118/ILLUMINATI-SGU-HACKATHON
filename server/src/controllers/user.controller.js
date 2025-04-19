@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/wrapAsync.js";
 import { sendMail } from "../utils/sendMail.js";
 import { generateOTP } from "../utils/generateOTP.js";
+import { logToAnalytics } from "../utils/logToAnalytics.js";
 
 export const sendOTP = AsyncHandler(async (req, res) => {
   const { email, login } = req.body;
@@ -31,14 +32,7 @@ export const sendOTP = AsyncHandler(async (req, res) => {
     expiresAt,
   });
 
-<<<<<<< HEAD
-
-
-  const subject = "Your OTP Code";
-  const message = `Your OTP code is ${otp}. It is valid for 5 minutes.`;
-=======
   const subject = "🔐 Your One-Time Password (OTP) - Action Required";
->>>>>>> 06d6522cd6a773436b6926e9251e025d328173a7
 
   const messageText = `Hello ${user.name || user.login},
 
@@ -66,6 +60,13 @@ Team`;
 `;
 
   await sendMail(email, subject, messageText, messageHTML);
+
+  await logToAnalytics(
+    "OTPRequest",
+    "OTP sent successfully",
+    user.login,
+    `OTP sent to ${email || login}`
+  );
 
   res.status(200).json(
     new ApiResponse(200, "OTP sent successfully", {
@@ -115,6 +116,14 @@ export const verifyOTP = AsyncHandler(async (req, res) => {
   }
 
   const accessToken = user.generateAccessToken();
+
+  await logToAnalytics(
+    "OTPVerify",
+    "OTP verified successfully",
+    user.login,
+    `Password reset for ${user.login}`
+  );
+
   res.status(200).json(
     new ApiResponse(200, "OTP verified successfully", {
       accessToken,
