@@ -1,15 +1,18 @@
-// utils/getGitHubReposFromSkills.js
-
 import axios from "axios";
 
-export const getGitHubReposFromSkills = async (query, count, skills, languages) => {
+export const getGitHubReposFromSkills = async (
+  query,
+  count,
+  skills,
+  languages
+) => {
   try {
     const searchURL = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=${count}`;
 
     const response = await axios.get(searchURL, {
       headers: {
         Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, // Optional: If using auth
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
     });
 
@@ -29,7 +32,10 @@ export const getGitHubReposFromSkills = async (query, count, skills, languages) 
       },
     }));
   } catch (error) {
-    console.error("💥 GitHub Repo Fetch Error:", error.response?.data || error.message);
+    console.error(
+      "GitHub Repo Fetch Error:",
+      error.response?.data || error.message
+    );
     return [];
   }
 };

@@ -1,4 +1,3 @@
-// utils/knownSkills.js
 export const KNOWN_SKILLS = [
   "JavaScript",
   "TypeScript",

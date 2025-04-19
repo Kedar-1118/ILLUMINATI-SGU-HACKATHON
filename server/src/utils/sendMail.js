@@ -25,7 +25,7 @@ export const sendMail = async (to, subject, text, html = "") => {
     to,
     subject,
     text,
-    ...(html && { html }), // only include html if provided
+    ...(html && { html }), 
   };
 
   try {

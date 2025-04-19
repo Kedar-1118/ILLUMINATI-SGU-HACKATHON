@@ -8,10 +8,8 @@ export const connectDB = async () => {
     const connectionInstance = await mongoose.connect(
       `${process.env.MONGO_URI}/${DB_NAME}`
     );
-    
-    console.log(
-      `MongoDB connected!! DB Host: It's a secret!`,
-    );
+
+    console.log(`MongoDB connected!! DB Host: It's a secret!`);
   } catch (err) {
     console.error("Error: ", err);
     process.exit(1);

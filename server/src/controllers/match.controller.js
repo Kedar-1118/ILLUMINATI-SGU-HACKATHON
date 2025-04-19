@@ -48,9 +48,9 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
 
 // Controller to get matched GitHub repositories based on user's skills
 export const getMatchRepos = AsyncHandler(async (req, res) => {
-  const { count = 15 } = req.query; // Default count is 10
-  const userId = req.user._id; // Get the user ID from the request
-  const user = await User.findById(userId).select("login").lean(); // Fetch user by ID
+  const { count = 15 } = req.query;
+  const userId = req.user._id;
+  const user = await User.findById(userId).select("login").lean();
   if (!user) {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
@@ -62,18 +62,18 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
     let distinctLanguages = [];
     let distinctSkills = [];
     if (!userSkills || userSkills.length === 0) {
-      const repos = await fetchGitHubRepos(user.login); // Fetch GitHub repositories for the user
-      const languages = repos.flatMap((repo) => repo.languages || []); // Extract languages from repos
-      const skills = repos.flatMap((repo) => repo.skills || []); // Extract skills from repos
+      const repos = await fetchGitHubRepos(user.login);
+      const languages = repos.flatMap((repo) => repo.languages || []);
+      const skills = repos.flatMap((repo) => repo.skills || []);
 
-      distinctLanguages = [...new Set(languages)]; // Remove duplicates
-      distinctSkills = [...new Set(skills)]; // Remove duplicates
+      distinctLanguages = [...new Set(languages)];
+      distinctSkills = [...new Set(skills)];
 
       skillsInput = [...distinctLanguages, ...distinctSkills]
-        .filter(Boolean) // Filter out any falsy values
-        .slice(0, 10); // Limit the number of skills
+        .filter(Boolean)
+        .slice(0, 10);
     } else {
-      skillsInput = userSkills; // Use provided skills if available
+      skillsInput = userSkills;
     }
 
     // Generate the GitHub query based on skills

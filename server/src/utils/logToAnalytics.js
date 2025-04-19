@@ -5,6 +5,8 @@ import { appendDataToSheet } from "../services/sheets.service.js";
  * @param {string} eventType - The type of event (e.g., "Login", "RepoMatch", "Error").
  * @param {string} message - Description or additional context.
  * @param {string} user - Optional user info (e.g., username or email).
+ * @param {string|Array} extraData - Optional additional data (e.g., repo names, error messages).
+ * @returns {Promise<void>} - Resolves when the data is logged successfully.
  */
 export const logToAnalytics = async (
   eventType,
@@ -22,8 +24,7 @@ export const logToAnalytics = async (
 
   try {
     await appendDataToSheet("Analytics!A:D", values);
-    // console.log(`✅ Logged to analytics: [${eventType}] ${message}`);
   } catch (error) {
-    console.error("❌ Failed to log to Google Sheets:", error.message);
+    console.error("Failed to log to Google Sheets:", error.message);
   }
 };

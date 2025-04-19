@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new Schema(
   {
@@ -31,13 +31,13 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: function () {
-        return this.provider === 'local';
+        return this.provider === "local";
       },
     },
     provider: {
       type: String,
-      enum: ['local', 'github'],
-      default: 'local',
+      enum: ["local", "github"],
+      default: "local",
     },
     githubId: {
       type: String,
@@ -50,8 +50,8 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   if (this.password) {
     this.password = await bcrypt.hash(this.password, 10);
   }
@@ -76,4 +76,4 @@ userSchema.methods.generateAccessToken = function () {
   );
 };
 
-export const User = mongoose.model('User', userSchema);
+export const User = mongoose.model("User", userSchema);

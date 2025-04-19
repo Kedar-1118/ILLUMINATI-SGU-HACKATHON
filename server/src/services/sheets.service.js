@@ -9,10 +9,10 @@ const spreadsheetId = process.env.SHEET_ID;
 // Extract credentials from environment variables
 const credentials = {
   client_email: process.env.CLIENT_EMAIL,
-  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'), // Ensure newlines are handled correctly
+  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
 };
 
-// 🔐 Create an authenticated client using service account credentials
+// Create an authenticated client using service account credentials
 const authClient = new google.auth.JWT({
   email: credentials.client_email,
   key: credentials.private_key,
@@ -21,9 +21,6 @@ const authClient = new google.auth.JWT({
 
 const sheets = google.sheets({ version: "v4", auth: authClient });
 
-/**
- * Get data from the specified range in the Google Sheet.
- */
 const getDataFromSheet = async (range) => {
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
@@ -32,9 +29,6 @@ const getDataFromSheet = async (range) => {
   return response.data.values;
 };
 
-/**
- * Write data to the specified range in the Google Sheet.
- */
 const writeDataToSheet = async (range, values) => {
   const response = await sheets.spreadsheets.values.update({
     spreadsheetId,
@@ -47,9 +41,6 @@ const writeDataToSheet = async (range, values) => {
   return response.data;
 };
 
-/**
- * Append data to the specified range in the Google Sheet.
- */
 const appendDataToSheet = async (range, values) => {
   const response = await sheets.spreadsheets.values.append({
     spreadsheetId,

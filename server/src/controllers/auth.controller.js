@@ -16,7 +16,6 @@ export const login = AsyncHandler(async (req, res) => {
     $or: [{ email }, { login }],
   });
 
-
   if (!user) {
     throw new ApiError(401, "Invalid email or password");
   }
