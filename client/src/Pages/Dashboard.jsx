@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import ProjectCard from '../components/ProjectCard';
 import ChatbotPopup from '../components/ChatbotPopup';
+import ContributionChart from '../components/ContributionCharts';
 
 
 const Dashboard = () => {
@@ -9,6 +10,7 @@ const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
+  const username = 'jogruber';
 
   const technologies = [
     'React', 'Python', 'Node.js', 'TypeScript',
@@ -166,9 +168,8 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isNavbarExpanded ? 'ml-48' : 'ml-12'
-        }`}
+        className={`flex-1 transition-all duration-300 ease-in-out ${isNavbarExpanded ? 'ml-48' : 'ml-12'
+          }`}
       >
         <Navbar />
 
@@ -177,7 +178,9 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold">Open Source Dashboard</h1>
             <p className="text-gray-400 mt-2">Discover projects matching your skills</p>
           </div>
-
+          <div className="mb-8">
+            <ContributionChart username={username} />
+          </div>
           {/* Search and Filters */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="relative">
@@ -220,11 +223,10 @@ const Dashboard = () => {
                       <div
                         key={tech}
                         onClick={() => toggleTech(tech)}
-                        className={`px-4 py-3 cursor-pointer ${
-                          selectedTech.includes(tech)
-                            ? 'bg-purple-900/30 text-purple-400'
-                            : 'text-gray-300 hover:bg-gray-700'
-                        }`}
+                        className={`px-4 py-3 cursor-pointer ${selectedTech.includes(tech)
+                          ? 'bg-purple-900/30 text-purple-400'
+                          : 'text-gray-300 hover:bg-gray-700'
+                          }`}
                       >
                         {tech}
                       </div>

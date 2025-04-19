@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 
 const ProjectCard = ({ project, selectedTech }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  // function to navigate to the project details page which is RepoAnalyzer
+  const navigateToProjectDetails = () => {
+    window.location.href = `repo-info/${project.owner}/${project.repo}`;
+  };
   return (
     <>
       {/* Main Card */}
@@ -13,11 +16,10 @@ const ProjectCard = ({ project, selectedTech }) => {
       >
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl font-bold text-white">{project.title}</h3>
-          <span className={`px-2 py-1 text-xs rounded-full ${
-            project.difficulty === 'Beginner' ? 'bg-green-900/30 text-green-400' :
+          <span className={`px-2 py-1 text-xs rounded-full ${project.difficulty === 'Beginner' ? 'bg-green-900/30 text-green-400' :
             project.difficulty === 'Intermediate' ? 'bg-yellow-900/30 text-yellow-400' :
-            'bg-red-900/30 text-red-400'
-          }`}>
+              'bg-red-900/30 text-red-400'
+            }`}>
             {project.difficulty}
           </span>
         </div>
@@ -28,11 +30,10 @@ const ProjectCard = ({ project, selectedTech }) => {
           {project.tech.map((tech) => (
             <span
               key={tech}
-              className={`px-2 py-1 text-xs rounded-full ${
-                selectedTech.includes(tech) ?
-                  'bg-purple-900/30 text-purple-400 border border-purple-500' :
-                  'bg-gray-700/50 text-gray-300'
-              }`}
+              className={`px-2 py-1 text-xs rounded-full ${selectedTech.includes(tech) ?
+                'bg-purple-900/30 text-purple-400 border border-purple-500' :
+                'bg-gray-700/50 text-gray-300'
+                }`}
             >
               {tech}
             </span>
@@ -101,7 +102,9 @@ const ProjectCard = ({ project, selectedTech }) => {
                 Visit Repository
               </a>
               <button
-                onClick={() => alert('Analyze logic goes here')}
+                onClick={() => {
+                  navigateToProjectDetails();
+                }}
                 className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm"
               >
                 View More Info
