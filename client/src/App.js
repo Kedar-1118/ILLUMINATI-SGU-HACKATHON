@@ -9,10 +9,12 @@ import {
   LandingPage,
   RepoAnalyzer
 } from './Pages/index.jsx';
+import Navbar from './components/Navbar.jsx';
 
 const App = () => {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />

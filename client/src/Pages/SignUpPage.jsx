@@ -48,17 +48,17 @@ const GitHubSignup = () => {
 
 
                     {/* Divider */}
-                    <div className="relative">
+                    {/* <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-700"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
                             <span className="px-2 bg-gray-900 text-gray-400">or</span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Alternative Signup (Optional) */}
-                    <div className="space-y-4">
+                    {/* <div className="space-y-4">
                         <input
                             type="email"
                             placeholder="Email address"
@@ -67,7 +67,7 @@ const GitHubSignup = () => {
                         <button className="w-full py-3 px-6 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors duration-200">
                             Get Started
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Footer Text */}
