@@ -22,9 +22,9 @@ passport.use(
 
       if (!user) {
         const email = profile.emails[0]?.value;
-        const githubId = profile.id;
+        const githubUsername = profile.username;
 
-        const generatedPassword = `GH_${email.split("@")[0]}_${githubId}`;
+        const generatedPassword = `GH_${email.split("@")[0]}_${githubUsername}`;
 
         user = new User({
           login: profile.username,
@@ -34,7 +34,7 @@ passport.use(
           bio: profile._json.bio,
           location: profile._json.location,
           provider: "github",
-          githubId,
+          githubId: profile.id,
           password: generatedPassword, 
         });
 
