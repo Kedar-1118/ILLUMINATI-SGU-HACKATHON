@@ -46,7 +46,7 @@ const GitHubSignup = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="text-4xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
                     >
-                        Join RepoMatch
+                        Join OpenNest
                     </motion.h2>
                     <p className="mt-4 text-gray-400 text-lg">
                         Find open-source projects that match your skills effortlessly.
@@ -84,7 +84,7 @@ const GitHubSignup = () => {
                     transition={{ delay: 0.6, duration: 0.8 }}
                 >
                     <h3 className="text-center text-xl font-semibold text-purple-300">
-                        Why Join RepoMatch?
+                        Why Join OpenNest?
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
