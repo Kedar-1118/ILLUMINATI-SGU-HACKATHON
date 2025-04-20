@@ -59,7 +59,7 @@ Team`;
   </div>
 `;
 
-  await sendMail(email, subject, messageText, messageHTML);
+  await sendMail(user.email, subject, messageText, messageHTML);
 
   await logToAnalytics(
     "OTPRequest",
@@ -70,7 +70,7 @@ Team`;
 
   res.status(200).json(
     new ApiResponse(200, "OTP sent successfully", {
-      identifier: email || username,
+      identifier: email || login,
       expiresAt,
     })
   );

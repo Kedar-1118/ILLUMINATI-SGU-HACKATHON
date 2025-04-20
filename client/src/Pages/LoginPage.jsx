@@ -79,6 +79,8 @@ const LoginPage = () => {
                 body: JSON.stringify(loginPayload),
             });
 
+            console.log('Response:', response);
+
             const data = await response.json();
             if (response.ok) {
                 setOtpSent(true);
