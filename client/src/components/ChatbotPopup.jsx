@@ -112,7 +112,7 @@ const handleSubmit = async (e) => {
             </div>
             <div>
               <h3 className="font-medium text-gray-200">GitGenie</h3>
-              <p className="text-xs text-gray-400">Powered by Ollama</p>
+              <p className="text-xs text-gray-400">Powered by Gemini</p>
             </div>
           </div>
           <button 
