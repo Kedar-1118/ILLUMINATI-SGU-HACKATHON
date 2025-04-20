@@ -10,6 +10,7 @@ import {
   RepoAnalyzer
 } from './Pages/index.jsx';
 import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/repo-info/:owner/:repo" element={<RepoAnalyzer />} />
       </Routes>
+      <Footer />
     </Router>
   );
 };

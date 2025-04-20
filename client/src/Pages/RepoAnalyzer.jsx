@@ -61,7 +61,7 @@ const RepoAnalyzer = () => {
         <div className="min-h-screen bg-gray-900 text-white p-6 font-sans">
             <div className="max-w-4xl mx-auto space-y-10">
                 <header className="text-center">
-                    <h1 className="text-4xl font-bold">📊 GitHub Insights: {repo} by {owner}</h1>
+                    <h1 className="text-4xl font-bold"> <b className='text-purple-400'>Insights</b>: <span className='text-blue-400'>{repo}</span> by <span className='text-green-400'>{owner}</span></h1>
                     {/* <p className="text-gray-400 mt-2">Analyzing: {githubUrl}   {owner}/{repo}</p> */}
                 </header>
 
