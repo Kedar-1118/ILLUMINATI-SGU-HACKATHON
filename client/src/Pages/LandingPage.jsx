@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import Navbar from "../components/Navbar";
 import { FaGithub, FaRocket, FaUsers } from "react-icons/fa";
 import { motion } from "framer-motion";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
     const form = useRef();
@@ -11,22 +11,24 @@ export default function LandingPage() {
     const sendEmail = (e) => {
         e.preventDefault();
 
-        emailjs.sendForm(
-            'service_iwcex8f',       // Replace with your EmailJS service ID
-            'template_qkt8ldj',      // Replace with your EmailJS template ID
-            form.current,
-            'Tf0tiIa2jbW73zyab'      // Replace with your EmailJS public key
-        ).then(
-            (result) => {
-                console.log(result.text);
-                setIsSent(true);
-                form.current.reset();
-            },
-            (error) => {
-                console.log(error.text);
-                setIsSent(false);
-            }
-        );
+        emailjs
+            .sendForm(
+                "service_iwcex8f", // Replace with your EmailJS service ID
+                "template_qkt8ldj", // Replace with your EmailJS template ID
+                form.current,
+                "Tf0tiIa2jbW73zyab" // Replace with your EmailJS public key
+            )
+            .then(
+                (result) => {
+                    console.log(result.text);
+                    setIsSent(true);
+                    form.current.reset();
+                },
+                (error) => {
+                    console.log(error.text);
+                    setIsSent(false);
+                }
+            );
     };
 
     return (
@@ -36,8 +38,6 @@ export default function LandingPage() {
             <div className="absolute top-1/4 left-1/4 w-full h-full bg-gradient-radial from-purple-900 to-transparent opacity-10 rounded-full blur-3xl z-0"></div>
 
             <div className="relative z-20">
-
-
                 {/* Hero Section */}
                 <main className="text-center px-6 py-20">
                     <motion.h2
@@ -56,13 +56,17 @@ export default function LandingPage() {
                     >
                         Join the open-source revolution and get matched with projects that suit your skills.
                     </motion.p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
-                    >
-                        Start Exploring
-                    </motion.button>
+
+                    {/* Buttons */}
+                    <div className="flex flex-col md:flex-row justify-center gap-4 mt-6">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
+                        >
+                            <Link to="/github-signup">Get Started</Link>
+                        </motion.button>
+                    </div>
                 </main>
 
                 {/* Cards Section */}
@@ -80,7 +84,9 @@ export default function LandingPage() {
                             transition={{ duration: 0.6 }}
                             className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
                         >
-                            <div className="text-3xl text-purple-400 mb-4"><FaGithub /></div>
+                            <div className="text-3xl text-purple-400 mb-4">
+                                <FaGithub />
+                            </div>
                             <h4 className="text-xl font-semibold mb-2 text-purple-100">GitHub Sync</h4>
                             <p className="text-purple-300">Seamlessly sync your contributions.</p>
                         </motion.div>
@@ -94,7 +100,9 @@ export default function LandingPage() {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
                         >
-                            <div className="text-3xl text-purple-400 mb-4"><FaRocket /></div>
+                            <div className="text-3xl text-purple-400 mb-4">
+                                <FaRocket />
+                            </div>
                             <h4 className="text-xl font-semibold mb-2 text-purple-100">Smart Matching</h4>
                             <p className="text-purple-300">AI-powered recommendations.</p>
                         </motion.div>
@@ -108,7 +116,9 @@ export default function LandingPage() {
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
                         >
-                            <div className="text-3xl text-purple-400 mb-4"><FaUsers /></div>
+                            <div className="text-3xl text-purple-400 mb-4">
+                                <FaUsers />
+                            </div>
                             <h4 className="text-xl font-semibold mb-2 text-purple-100">Community Focus</h4>
                             <p className="text-purple-300">Connect with maintainers.</p>
                         </motion.div>
@@ -157,7 +167,9 @@ export default function LandingPage() {
                             Send
                         </button>
                         {isSent && (
-                            <p className="text-green-400 text-center mt-4">Your message has been sent!</p>
+                            <p className="text-green-400 text-center mt-4">
+                                Your message has been sent!
+                            </p>
                         )}
                     </motion.form>
                 </section>
@@ -165,4 +177,3 @@ export default function LandingPage() {
         </div>
     );
 }
-

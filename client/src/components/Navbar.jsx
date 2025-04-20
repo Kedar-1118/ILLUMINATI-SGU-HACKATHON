@@ -9,12 +9,20 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  // Pages where Navbar should be hidden
+  const hiddenPaths = ['/', '/login', '/github-signup'];
+  if (hiddenPaths.includes(location.pathname)) {
+    return null;
+  }
+
   const navLinks = [
     { to: '/', icon: <FaHome />, text: 'Home' },
     { to: '/profile', icon: <FaUser />, text: 'Profile' },
     { to: '/dashboard', icon: <FaTachometerAlt />, text: 'Dashboard' },
     { to: '/logout', icon: <FaSignOutAlt />, text: 'Logout' },
   ];
+
+
 
   return (
     <header className="bg-gray-900 text-white shadow-md">

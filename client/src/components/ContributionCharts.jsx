@@ -54,7 +54,7 @@ const ContributionChart = ({ username }) => {
             </h2>
 
             {/* Bar Chart */}
-            <div>
+            {/* <div>
                 <h3 className="text-xl font-medium mb-2">📦 Bar Chart View</h3>
                 <div className="w-full h-80">
                     <ResponsiveContainer width="100%" height="100%">
@@ -75,11 +75,11 @@ const ContributionChart = ({ username }) => {
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
-            </div>
+            </div> */}
 
             {/* Line Chart */}
             <div>
-                <h3 className="text-xl font-medium mb-2">📈 Line Chart View</h3>
+                {/* <h3 className="text-xl font-medium mb-2">📈 Line Chart View</h3> */}
                 <div className="w-full h-80">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={data}>
