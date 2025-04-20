@@ -19,8 +19,9 @@ const Navbar = () => {
     { to: '/', icon: <FaHome />, text: 'Home' },
     { to: '/profile', icon: <FaUser />, text: 'Profile' },
     { to: '/dashboard', icon: <FaTachometerAlt />, text: 'Dashboard' },
-    { to: '/logout', icon: <FaSignOutAlt />, text: 'Logout' },
   ];
+
+
 
 
 
@@ -86,8 +87,12 @@ const Navbar = () => {
               {text}
             </NavLink>
           ))}
+          {/* <button className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-700" onClick={handleLogoutUser}>
+            <FaSignOutAlt /> Logout
+          </button> */}
         </nav>
       )}
+
     </header>
   );
 };

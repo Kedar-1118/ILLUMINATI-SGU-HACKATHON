@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
+import ChatbotPopup from '../components/ChatbotPopup';
 import BadgesGrid from '../components/BadgesGrid';
 import ContributionChart from '../components/ContributionCharts';
 
@@ -214,6 +214,7 @@ const Profile = () => {
             </div>
           )}
         </main>
+        <ChatbotPopup />
       </div>
     </div>
   );

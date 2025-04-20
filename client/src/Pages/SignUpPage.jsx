@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
     MarkGithubIcon,
     RocketIcon,
@@ -6,6 +7,7 @@ import {
     FlameIcon,
     DeviceDesktopIcon,
 } from "@primer/octicons-react";
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -17,15 +19,14 @@ const GitHubSignup = () => {
         const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
         const redirectUri = process.env.REACT_APP_GITHUB_REDIRECT_URI;
         const scope = "user:email";
-        const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-
+        const githubAuthUrl = "https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}";
         window.location.href = githubAuthUrl;
     };
 
     return (
-        <div className="min-h-screen bg-black text-gray-100 relative overflow-hidden px-6 py-10 ">
+        <div className="min-h-screen bg-black text-gray-100 relative overflow-hidden px-6 py-10">
             {/* Glowing BG circles */}
-            <div className="absolute top-0 left-0 w-80 h-80 bg-purple-700 opacity-20 rounded-full blur-3xl animate-pulse " />
+            <div className="absolute top-0 left-0 w-80 h-80 bg-purple-700 opacity-20 rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-pink-600 opacity-20 rounded-full blur-3xl animate-pulse" />
 
             {/* Main container */}
@@ -119,7 +120,16 @@ const GitHubSignup = () => {
                     </div>
                 </motion.div>
 
-
+                {/* Login Button */}
+                <div className="flex justify-center mt-10">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
+                    >
+                        <Link to="/login">Login</Link>
+                    </motion.button>
+                </div>
 
                 {/* Footer */}
                 <p className="mt-12 text-center text-sm text-gray-500">
@@ -129,14 +139,6 @@ const GitHubSignup = () => {
                     </a>
                 </p>
             </div>
-
-            <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r align-center from-purple-500 to-blue-900 px-6 mt-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
-            >
-                <Link to="/login">Login</Link>
-            </motion.button>
         </div>
     );
 };
