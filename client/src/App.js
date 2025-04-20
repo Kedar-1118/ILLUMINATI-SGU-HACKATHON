@@ -4,7 +4,6 @@ import {
   Dashboard,
   LoginPage,
   Profile,
-  About,
   GitHubSignup,
   LandingPage,
   RepoAnalyzer
@@ -22,7 +21,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/github-signup" element={<GitHubSignup />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/about" element={<About />} />
+        {/* <Route path="/about" element={<About />} /> */}
         <Route path="/repo-info/:owner/:repo" element={<RepoAnalyzer />} />
       </Routes>
       <Footer />
