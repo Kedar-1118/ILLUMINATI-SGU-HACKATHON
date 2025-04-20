@@ -247,18 +247,18 @@ const LoginPage = () => {
                     <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm text-center">
                         <div className="mb-4 text-purple-400 font-bold text-lg">OTP Verification</div>
 
-                        <button
+                        {!otpSent && (<button
                             onClick={handleSendOTP}
                             disabled={isLoading}
                             className="w-full py-2 mb-4 bg-purple-600 text-white rounded hover:bg-purple-700"
                         >
                             {isLoading ? 'Sending OTP...' : 'Send OTP'}
-                        </button>
+                        </button>)}
 
                         {otpSent && (
                             <>
                                 <label className="block text-sm font-medium text-gray-300 text-left mb-1">
-                                    New Password
+                                    New Password:
                                 </label>
                                 <input
                                     type="password"
