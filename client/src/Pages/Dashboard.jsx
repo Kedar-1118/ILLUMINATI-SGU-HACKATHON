@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import ChatbotPopup from '../components/ChatbotPopup';
 
-
 const Dashboard = () => {
   const [selectedTech, setSelectedTech] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -11,6 +10,7 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [technologies, setTechnologies] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [loading, setLoading] = useState(false); // ✅ Added loading state
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -35,13 +35,14 @@ const Dashboard = () => {
 
   const fetchProjects = async (skills = []) => {
     try {
+      setLoading(true); // ✅ Start loading
       const options = {
-        method: 'GET',
+        method: 'post',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
-        ...(selectedTech.length > 0 && { body: JSON.stringify({ skills }) }),
+        ...(skills.length > 0 && { body: JSON.stringify({ skills }) }),
       };
 
       const res = await fetch(`${process.env.REACT_APP_API_URL}/match/match-repos`, options);
@@ -49,6 +50,8 @@ const Dashboard = () => {
       setProjects(data.message.matchedRepos);
     } catch (err) {
       console.error('Failed to fetch matched repos:', err);
+    } finally {
+      setLoading(false); // ✅ Stop loading
     }
   };
 
@@ -220,7 +223,15 @@ const Dashboard = () => {
 
           {/* Project Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.length > 0 ? (
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <svg className="animate-spin h-10 w-10 text-purple-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <p className="mt-2 text-purple-400">Loading projects...</p>
+              </div>
+            ) : projects.length > 0 ? (
               projects.map((project) => (
                 <ProjectCard
                   key={project.id}
@@ -255,7 +266,7 @@ const Dashboard = () => {
                     onClick={() => {
                       setSelectedTech([]);
                       setSelectedLanguages([]);
-                      fetchProjects(); // Refetch all on clear
+                      fetchProjects();
                     }}
                     className="mt-4 px-4 py-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
                   >

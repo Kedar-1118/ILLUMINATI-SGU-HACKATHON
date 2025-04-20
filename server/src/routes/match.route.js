@@ -10,6 +10,6 @@ const router = express.Router();
 router.use(verifyJWT);
 
 router.get("/extract-skills", getUserSkills);
-router.get("/match-repos", getMatchRepos);
+router.post("/match-repos", getMatchRepos);
 
 export default router;

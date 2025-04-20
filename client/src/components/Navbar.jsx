@@ -26,11 +26,13 @@ const Navbar = () => {
 
   return (
     <header className="bg-gray-900 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+          {/* SVG LOGO */}
+
 
           {/* Logo / Site Name */}
-          <div className="flex-shrink-0 text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+          <div className="flex-shrink-0 text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
             OpenNest
           </div>
 

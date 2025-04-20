@@ -32,10 +32,9 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
   );
 
   await logToAnalytics(
-    "SkillExtraction",
-    "Extracted skills from GitHub repos",
-    user.login,
-    matchedSkills
+    "User skills fetched successfully",
+    "Skills fetched",
+    userId
   );
 
   return res.status(200).json(
@@ -48,33 +47,40 @@ export const getUserSkills = AsyncHandler(async (req, res) => {
 
 // Controller to get matched GitHub repositories based on user's skills
 export const getMatchRepos = AsyncHandler(async (req, res) => {
-  const { count = 15 } = req.query;
-  const userId = req.user._id;
-  const user = await User.findById(userId).select("login").lean();
+  const { count = 15 } = req.query; // Default count is 10
+  console.log("hello");
+  const userId = req.user._id; // Get the user ID from the request
+  console.log(userId);
+  const user = await User.findById(userId).select("login").lean(); // Fetch user by ID
+  console.log(user);
   if (!user) {
     return res.status(400).json(new ApiError(400, "Username is required"));
   }
 
   const userSkills = req.body.skills;
 
+  // console.log("User skills:", userSkills);
+
   try {
     let skillsInput = [];
     let distinctLanguages = [];
     let distinctSkills = [];
     if (!userSkills || userSkills.length === 0) {
-      const repos = await fetchGitHubRepos(user.login);
-      const languages = repos.flatMap((repo) => repo.languages || []);
-      const skills = repos.flatMap((repo) => repo.skills || []);
+      const repos = await fetchGitHubRepos(user.login); // Fetch GitHub repositories for the user
+      const languages = repos.flatMap((repo) => repo.languages || []); // Extract languages from repos
+      const skills = repos.flatMap((repo) => repo.skills || []); // Extract skills from repos
 
-      distinctLanguages = [...new Set(languages)];
-      distinctSkills = [...new Set(skills)];
+      distinctLanguages = [...new Set(languages)]; // Remove duplicates
+      distinctSkills = [...new Set(skills)]; // Remove duplicates
 
       skillsInput = [...distinctLanguages, ...distinctSkills]
-        .filter(Boolean)
-        .slice(0, 10);
+        .filter(Boolean) // Filter out any falsy values
+        .slice(0, 10); // Limit the number of skills
     } else {
-      skillsInput = userSkills;
+      skillsInput = userSkills; // Use provided skills if available
     }
+
+    // console.log("Extracted skills:", skillsInput); // Log the extracted skills
 
     // Generate the GitHub query based on skills
     const generatedQuery = getGitHubQueryFromSkills(skillsInput);
@@ -104,14 +110,6 @@ export const getMatchRepos = AsyncHandler(async (req, res) => {
     );
   } catch (error) {
     console.error("Error matching repos:", error);
-
-    await logToAnalytics(
-      "Error matching repos",
-      "Error occurred while matching repos",
-      user.login,
-      error.message
-    );
-
     return res
       .status(500)
       .json(new ApiError(500, "Error extracting or matching skills", error));

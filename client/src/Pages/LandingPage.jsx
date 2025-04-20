@@ -10,13 +10,12 @@ export default function LandingPage() {
 
     const sendEmail = (e) => {
         e.preventDefault();
-
         emailjs
             .sendForm(
-                "service_iwcex8f", // Replace with your EmailJS service ID
-                "template_qkt8ldj", // Replace with your EmailJS template ID
+                "service_iwcex8f", // Replace with your service ID
+                "template_qkt8ldj", // Replace with your template ID
                 form.current,
-                "Tf0tiIa2jbW73zyab" // Replace with your EmailJS public key
+                "Tf0tiIa2jbW73zyab" // Replace with your public key
             )
             .then(
                 (result) => {
@@ -33,43 +32,56 @@ export default function LandingPage() {
 
     return (
         <div className="min-h-screen bg-black text-white font-sans relative overflow-hidden">
-            {/* Shiny animated background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black animate-pulse z-0"></div>
-            <div className="absolute top-1/4 left-1/4 w-full h-full bg-gradient-radial from-purple-900 to-transparent opacity-10 rounded-full blur-3xl z-0"></div>
+            {/* Animated Background Orbs */}
+            <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-purple-800 opacity-20 blur-3xl rounded-full animate-moveX z-0"></div>
+            <div className="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-blue-900 opacity-10 blur-2xl rounded-full animate-moveY z-0"></div>
+            <div className="absolute bottom-[10%] left-[15%] w-[250px] h-[250px] bg-purple-700 opacity-15 blur-2xl rounded-full animate-moveY z-0"></div>
 
             <div className="relative z-20">
                 {/* Hero Section */}
                 <main className="text-center px-6 py-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: -50 }}
+                    <motion.h1
+                        initial={{ opacity: 0, y: -30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
-                        className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent"
+                        className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent tracking-wide animate-float"
+                    >
+                        OpenNest
+                    </motion.h1>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.3 }}
+                        className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent"
                     >
                         Discover. Match. Contribute.
                     </motion.h2>
+
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="text-lg md:text-xl text-purple-200 mb-8 max-w-2xl mx-auto"
                     >
                         Join the open-source revolution and get matched with projects that suit your skills.
                     </motion.p>
 
-                    {/* Buttons */}
-                    <div className="flex flex-col md:flex-row justify-center gap-4 mt-6">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex justify-center"
+                    >
+                        <Link
+                            to="/github-signup"
                             className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
                         >
-                            <Link to="/github-signup">Get Started</Link>
-                        </motion.button>
-                    </div>
+                            Get Started
+                        </Link>
+                    </motion.div>
                 </main>
 
-                {/* Cards Section */}
+                {/* Highlights Section */}
                 <section className="py-20 px-6">
                     <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-900 bg-clip-text text-transparent">
                         Platform Highlights
@@ -82,7 +94,7 @@ export default function LandingPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center animate-float"
                         >
                             <div className="text-3xl text-purple-400 mb-4">
                                 <FaGithub />
@@ -98,7 +110,7 @@ export default function LandingPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center animate-float"
                         >
                             <div className="text-3xl text-purple-400 mb-4">
                                 <FaRocket />
@@ -114,7 +126,7 @@ export default function LandingPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.4 }}
-                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center"
+                            className="bg-gradient-to-b from-black to-gray-900 p-6 rounded-2xl shadow-lg border border-purple-800 text-center animate-float"
                         >
                             <div className="text-3xl text-purple-400 mb-4">
                                 <FaUsers />
