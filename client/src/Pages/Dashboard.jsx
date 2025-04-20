@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
 import ProjectCard from '../components/ProjectCard';
 import ChatbotPopup from '../components/ChatbotPopup';
-import ContributionChart from '../components/ContributionCharts';
+
 
 const Dashboard = () => {
   const [selectedTech, setSelectedTech] = useState([]);

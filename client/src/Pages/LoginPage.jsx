@@ -5,7 +5,7 @@ import {
     ArrowPathIcon,
     CheckCircleIcon,
 } from '@heroicons/react/24/outline';
-import Cookies from 'js-cookie';
+
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');

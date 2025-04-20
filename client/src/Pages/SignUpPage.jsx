@@ -133,7 +133,7 @@ const GitHubSignup = () => {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-purple-500 to-blue-900 px-6 mt-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
+                className="bg-gradient-to-r align-center from-purple-500 to-blue-900 px-6 mt-6 py-3 rounded-xl text-white font-semibold transition shadow-md"
             >
                 <Link to="/login">Login</Link>
             </motion.button>
