@@ -162,7 +162,7 @@ const LoginPage = () => {
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-purple-400">
-                    Welcome to RepoMatch
+                    Welcome to OpenNest
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-400">
                     Match with GitHub repositories based on your skills
