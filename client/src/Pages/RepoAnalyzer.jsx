@@ -19,7 +19,7 @@ const RepoAnalyzer = () => {
 
             setLoading(true);
             try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/analyze`, {
+                const response = await axios.post(`https://open-nest-server.onrender.com/analyze`, {
                     repo: `${owner}/${repo}`,
                 });
                 const result = response.data;
