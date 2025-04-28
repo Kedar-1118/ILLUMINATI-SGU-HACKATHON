@@ -49,7 +49,7 @@ export default function LandingPage() {
     <img
         src="OpenNestLogo1.png"
         alt=""
-        className="w-13 h-13 md:w-15 md:h-16 mr-5"
+        className=" md:w-15 md:h-16 mr-5"
     />
     OpenNest
 </motion.h1>
