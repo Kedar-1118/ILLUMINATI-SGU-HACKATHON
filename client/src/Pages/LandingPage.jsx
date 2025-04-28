@@ -40,19 +40,20 @@ export default function LandingPage() {
             <div className="relative z-20">
                 {/* Hero Section */}
                 <main className="text-center px-6 py-20">
-                <motion.h1
+               <motion.h1
     initial={{ opacity: 0, y: -30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 1 }}
-    className="flex items-center justify-center text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent tracking-wide animate-float"
+    className="flex flex-col md:flex-row items-center justify-center text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent tracking-wide animate-float"
 >
     <img
         src="OpenNestLogo1.png"
         alt=""
-        className=" md:w-15 md:h-16 mr-5"
+        className="w-16 h-16 mb-2 md:mb-0 md:mr-5"
     />
     OpenNest
 </motion.h1>
+
 
 
                     <motion.h2
