@@ -59,7 +59,7 @@ app.get("/test", (req, res) => {
   );
 });
 
-app.post("/analyze", getRepoInfo);
+app.post("/api/v1/analyze", getRepoInfo);
 
 // Import routes
 import authRoutes from "./routes/auth.route.js";
